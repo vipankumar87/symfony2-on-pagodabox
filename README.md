@@ -6,7 +6,7 @@ This repository contains a markdown guide with a boilerplate Boxfile for setting
 ### What's what:
 
 * Guide: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
-* Boilerplate: [Boxfile](Boxfile) `||` [Boxfile.comments](Boxfile)
+* Boilerplate: [Boxfile](Boxfile) `||` [Boxfile.comments](Boxfile.comments)
 
 ### Why Symfony2 and PagodaBox?
 
