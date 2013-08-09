@@ -3,7 +3,9 @@ Symfony 2.3.x on PagodaBox
 
 ### This is a work in progress
 
-The aim of this document is to learn by teaching and record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. **Feedback is welcome.**
+The aim of this document is to learn by teaching and record my process of getting a [Symfony 2](http://symfony.com/) application running on [PagodaBox](http://pagodabox.com/) with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. 
+
+**Feedback is welcome.**
 
 This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
 
