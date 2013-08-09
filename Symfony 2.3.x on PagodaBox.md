@@ -3,7 +3,7 @@ Symfony 2.3.x on PagodaBox
 
 The aim of this document is to record my process getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt/deployment cycles.
 
-<span style="color:red; font-weight:bold; text-transform: uppercase">This is a work in progress</span>
+<p style="color:red; font-weight:bold; text-transform: uppercase">This is a work in progress</p>
 
 ## Start locally with these tools
 
