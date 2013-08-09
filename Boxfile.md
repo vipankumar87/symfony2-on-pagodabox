@@ -1,6 +1,6 @@
 global:
-  env:             # custom env vars
-    - PARTY: pizza
+  env:             # ~ Optionally add custom env vars
+    - PARTY: pizza # http://help.pagodabox.com/customer/portal/articles/175470
 
 web1:              # component type & number
 
