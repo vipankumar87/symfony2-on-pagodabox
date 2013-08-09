@@ -3,9 +3,9 @@ symfony-on-pagodabox
 
 This repository contains a markdown guide with a boilerplate Boxfile for setting up and deploying Symfony 2.x on PagodaBox. The goal is to stay complete with the newest version of Symfony starting at 2.3.x.
 
-### Guide: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
-### Boilerplate: [Boxfile](Boxfile)
-### +Comments: [Boxfile.comments](Boxfile)
+* ####Guide: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
+* ####Boilerplate: [Boxfile](Boxfile)
+* ####+Comments: [Boxfile.comments](Boxfile)
 
 ### Why Symfony2 and PagodaBox?
 
