@@ -12,7 +12,6 @@ This is written from the perspective of using the bash shell on OSX — extrapol
 * Currently working with Symfony 2.3.3
 
 ## Start locally
-================
 
 PagodaBox offers [Quickstarts](https://dashboard.pagodabox.com/apps/new?search=symfony) for various frameworks but I'd recommend not using any Quickstart that forks the Symfony core —  I think providing source code is a job best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox.
 
@@ -33,8 +32,8 @@ It goes without saying you're going to want to create a high parity between your
 Some extensions — like Xdebug — are best left off the production server but in general you should aim to ensure that boths stacks match with the same major version and hopefully minor version of each extension.
 
 
-## Create a Symfony project with Composer
-=========================================
+Create a Symfony project with Composer
+======================================
 
 You can name your project anything, I chose "fresh".
 
