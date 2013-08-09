@@ -3,15 +3,17 @@ Symfony 2.3.x on PagodaBox
 
 ### This is a work in progress
 
-The aim of this document is to record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. **Feedback is welcome.**
+The aim of this document is to learn by teaching and record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. **Feedback is welcome.**
 
 This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
 
-#### "$" and shell commands
+### In this document
 
-Throughout this document I'll follow the convention of representing your shell prompt with a '$', so if you see a command like `$ cd` you would copy 'cd' into your prompt and execute.
+#### "$" for shell commands
 
-#### Composer usage in this document
+Throughout this document I'll follow the convention of representing your shell prompt with a '$', so if you see a command like `$ cd/path/to` you would copy 'cd/path/to' into your prompt and execute it.
+
+#### Composer — the PHP Dependency Managemer
 
 Throughout this document I'll use `$ composer` because I've installed it [globally](http://getcomposer.org/doc/00-intro.md#globally). If you install it [locally](http://getcomposer.org/doc/00-intro.md#locally) (i.e. per project) than you'll want to use `$ php composer.phar` — just a heads up.
 
@@ -27,17 +29,17 @@ PagodaBox offers [Quickstarts](https://dashboard.pagodabox.com/apps/new?search=s
 
 ### Local Requriments
 
-This tutorial assumes familiarity with the standard Symfony stack:
+This tutorial assumes you're using the standard Symfony stack:
 
 * Apache 2
 * PHP 5.3.3+ (as an Apache module and command line tool)
 * MySQL (not sure about the min version)
 * Git (whatever is newest)
-* Composer for PHP (always the newest)
+* Composer (always the newest)
 
 Personally I use MAMP Pro to manage Apache/MySQL/PHP (I've never found anything simpler). I use Pear for php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer via their standard cURL method.
- 
-It goes without saying you're going to want to create a high parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) becuase some extensions require building from source (like [intl](http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer)).
+
+It goes without saying you're going to want to maximize parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) because some extensions require building from source (like [intl](http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer)).
 
 Some extensions — like Xdebug — are best left off the production server but in general you should aim to ensure that boths stacks match with the same major version and hopefully minor version of each extension.
 
@@ -52,24 +54,24 @@ $ mkdir fresh
 $ composer create-project symfony/framework-standard-edition fresh/ 2.3.3
 $ cd fresh
 ``` 
-Running the create-project does a few things, it grabs the core Symfony files and then runs `composer install` which simply looks at the `composer.json` file (included with Symfony's core) and installs all of the dependencies listed. These get installed in `vendor/` which is a default convention I happily adhere to.
+Running the create-project does a few things, it grabs the core Symfony files and then runs `composer install` which simply looks at the `composer.json` file (included with Symfony's core) and installs all of the dependencies listed. These get installed in `vendor/` which is a default convention for keeping external code organized.
 
-After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values, some of them won't even be needed since we'll use Apache Environment Variables which makes it easier to maintain difference between our local and PagodaBox setups (more on this later).
+After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file which resides at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values except for 'secret' which you'll want to provide something unique. We'll revisit paramtes.yml later since we'll use Apache Environment Variables (EnvVar) to make maintaining differences between our local and PagodaBox setups easier (more on this later).
 
-Here's an overview of the prompts you may see:
+Here's an overview of the prompts with the `defaults` you'll probably see:
 
-- **database_driver:** pdo_mysql `Doctrine uses pdo by default and PagodaBox supports MySQL by default`
-- **database_host:** 127.0.0.1 `we'll configure this as an EnvVar later`
-- **database_port:** null `ditto EnvVar`
-- **database_host:** symfony `ditto EnvVar`
-- **database_user:** 127.0.0.1 `ditto EnvVar`
-- **database_password:** 127.0.0.1 `ditto EnvVar`
-- **mailer_transport:** smtp `only needed if you intend to use Symfony's mail component`
-- **mailer_host:** 127.0.0.1 `ditto`
-- **mailer_host:** null `ditto`
-- **mailer_host:** null `ditto`
-- **locale:** en `This optional prefix refers to the default language of your site (ToDO: check if it's a convention or a specificaiton)`
-- **secret:** *Fill this in!* I like to hash a random phrase (in a different Terminal window) `$ md5 -s 'put a random phrase here'`
+- **database_driver:** `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
+- **database_host:** `127.0.0.1` we'll configure this as an EnvVar later
+- **database_port:** `null` ditto EnvVar
+- **database_host:** `symfony` ditto EnvVar
+- **database_user:** `127.0.0.1` ditto EnvVar
+- **database_password:** `127.0.0.1 `ditto EnvVar
+- **mailer_transport:** `smtp` only needed if you intend to use Symfony's mail component
+- **mailer_host:** `127.0.0.1` ditto
+- **mailer_host:** `null` ditto
+- **mailer_host:** `null` ditto
+- **locale:** `en` This optional prefix refers to the default language of your site (ToDO: check if it's a convention or a specificaiton)
+- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different Terminal window) $ md5 -s 'put a random phrase here'
 
 With the parameters configured the Symfony installer runs a few more commands and assuming there were no errors we're off to a good start!
 
@@ -126,7 +128,7 @@ You should also check your PHP configuration at `http://localhost/config.php`. T
 
 ## Open up PagodaBox
 
-If you haven't — duh, do it — sign up for PagodaBox and go to `https://dashboard.pagodabox.com/` and create a new application.
+If you haven't sign up for PagodaBox and go to `https://dashboard.pagodabox.com/` and create a new application.
 
 ### Create your first application
 * select Empty Repo
@@ -141,9 +143,9 @@ After you select Git as your deployment method you'll see some instrucitons that
 
 ### The super cool Boxfile
 
-PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called [Boxfile](http://help.pagodabox.com/customer/portal/articles/175475) which is a YAML formatted configuration simply named `Boxfile` that sits in the root of your app and specifies your production platform. Since it's part of your repo it's version controllable!
+PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called [Boxfile](http://help.pagodabox.com/customer/portal/articles/175475) which is a YAML formatted configuration named `Boxfile` that sits in the root of your app and specifies your production platform. Since it's part of your repo it's version controlled, which is awesome when you need to rollback your app or switch between branches with different configurations (if that's your thing)!
 
-Without getting into the nitty gritty this is a Boxfile I've succesfully used with Symfony 2.3.3 is below.
+Without getting into the nitty gritty below is a Boxfile I've successfully used to deploy a barebones Symfony 2.3.3 app on PagodaBox.
 
 This repo contains the most up to date copy of my suggested [Boxfile](http://Boxfile) along with a commented version called [Boxfile.comments](Boxfile.comments).
 
