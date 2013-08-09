@@ -1,6 +1,7 @@
-# Installing a fresh Symfony 2.3.x app and deploying to PagodaBox
+Symfony 2.3.x on PagodaBox
+==========================
 
-The aim of this document is to record my process getting a Symfony 2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt/deployment cycles.
+The aim of this document is to record my process getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt/deployment cycles.
 
 <span style="color:red; font-weight:bold; text-transform: uppercase">This is a work in progress</span>
 
