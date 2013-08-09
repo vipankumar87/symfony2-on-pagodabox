@@ -1,26 +1,36 @@
 Symfony 2.3.x on PagodaBox
 ==========================
 
-The aim of this document is to record my process getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt/deployment cycles.
+### This is a work in progress
 
-<p style="color:red; font-weight:bold; text-transform: uppercase">This is a work in progress</p>
+The aim of this document is to record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. 
+
+This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
+
+### Tested with
+
+* Currently working with Symfony 2.3.3
 
 ## Start locally with these tools
+===
 
 We'll create a skeleton app locally, and then push it to PagodaBox.
+
 This tutorial requires familiarity with the standard Symfony stack:
 
 * Apache
 * PHP (as an Apache module and command line tool)
 * MySQL
 * git
-* Composer (more on that next!)
+* Composer
 
-This is written from the perspective of OSX. Extrapolate if your OS is different.
+It goes without saying you're going to want to create a high parity between your (local) development environment and your PagodaBox production environment. As such you should know what your local environment looks like.
 
-## Start a Symfony project with Composer
 
-I've seen many 
+## Create a Symfony project with Composer
+===
+
+PagodaBox 
 
 You can name your project anything, I chose "fresh".
 
