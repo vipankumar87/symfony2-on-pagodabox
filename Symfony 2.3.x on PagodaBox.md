@@ -7,27 +7,37 @@ The aim of this document is to record my process of getting a Symfony2 app up ru
 
 This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
 
+#### "$" and shell commands
+
+Throughout this document I'll follow the convention of representing your shell prompt with a '$', so if you see a command like `$ cd` you would copy 'cd' into your prompt and execute.
+
+#### Composer usage in this document
+
+Throughout this document I'll use `$ composer` because I've installed it [globally](http://getcomposer.org/doc/00-intro.md#globally). If you install it [locally](http://getcomposer.org/doc/00-intro.md#locally) (i.e. per project) than you'll want to use `$ php composer.phar` — just a heads up.
+
 ### Tested with
 
-* Currently working with Symfony 2.3.3
+* August 9, 2013: works with Symfony 2.3.3
 
-## Start locally
+
+Start locally
+=============
 
 PagodaBox offers [Quickstarts](https://dashboard.pagodabox.com/apps/new?search=symfony) for various frameworks but I'd recommend not using any Quickstart that forks the Symfony core —  I think providing source code is a job best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox.
 
 ### Local Requriments
 
-This tutorial requires familiarity with the standard Symfony stack:
+This tutorial assumes familiarity with the standard Symfony stack:
 
 * Apache 2
 * PHP 5.3.3+ (as an Apache module and command line tool)
 * MySQL (not sure about the min version)
 * Git (whatever is newest)
-* Composer (always the newest)
+* Composer for PHP (always the newest)
 
 Personally I use MAMP Pro to manage Apache/MySQL/PHP (I've never found anything simpler). I use Pear for php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer via their standard cURL method.
  
-It goes without saying you're going to want to create a high parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) becuase some extensions require building from source (like [intl](http://))
+It goes without saying you're going to want to create a high parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) becuase some extensions require building from source (like [intl](http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer)).
 
 Some extensions — like Xdebug — are best left off the production server but in general you should aim to ensure that boths stacks match with the same major version and hopefully minor version of each extension.
 
@@ -42,13 +52,13 @@ $ mkdir fresh
 $ composer create-project symfony/framework-standard-edition fresh/ 2.3.3
 $ cd fresh
 ``` 
-Running the create-project does a few things, it grabs the core Symfony files and then runs `composer install` which simply looks at the `composer.json` file (included with Symfony's core) and installs all of the dependencies listed. These get installed in `vendor/` which is an assumed convention you should definitely follow.
+Running the create-project does a few things, it grabs the core Symfony files and then runs `composer install` which simply looks at the `composer.json` file (included with Symfony's core) and installs all of the dependencies listed. These get installed in `vendor/` which is a default convention I happily adhere to.
 
 After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values, some of them won't even be needed since we'll use Apache Environment Variables which makes it easier to maintain difference between our local and PagodaBox setups (more on this later).
 
 Here's an overview of the prompts you may see:
 
-- **database_driver:** pdo_mysql `Doctrine uses pdo by default and PagodaBox supports MySQL`
+- **database_driver:** pdo_mysql `Doctrine uses pdo by default and PagodaBox supports MySQL by default`
 - **database_host:** 127.0.0.1 `we'll configure this as an EnvVar later`
 - **database_port:** null `ditto EnvVar`
 - **database_host:** symfony `ditto EnvVar`
@@ -58,14 +68,18 @@ Here's an overview of the prompts you may see:
 - **mailer_host:** 127.0.0.1 `ditto`
 - **mailer_host:** null `ditto`
 - **mailer_host:** null `ditto`
-- **locale:** en `This optional prefix refers to the default language of your site`
-- **secret:** *This doesn't have a good default, so fill it in!* I like to hash a random phrase (in a different Terminal window) `$ md5 -s 'put a random phrase here'`
+- **locale:** en `This optional prefix refers to the default language of your site (ToDO: check if it's a convention or a specificaiton)`
+- **secret:** *Fill this in!* I like to hash a random phrase (in a different Terminal window) `$ md5 -s 'put a random phrase here'`
 
 With the parameters configured the Symfony installer runs a few more commands and assuming there were no errors we're off to a good start!
 
+You can `$ ls -lAGh` or `$ open .` (on osx) or `$ tree` (just 'brew install tree') to see what got installed.
+
 ### Set permissions for cache and logs
 
-There are a [few options](http://symfony.com/doc/master/book/installation.html#configuration-and-setup) for this critical step of ensuring Symfony can write to `app/cache/` and `app/logs/`. It varies depending on your system but for OSX and I like this one-liner which changes permissions with ACL. It allows you (the user logged into the terminal) and the APACHEUSER (your webserver process) to write to these directories:
+There are a [few options](http://symfony.com/doc/master/book/installation.html#configuration-and-setup) for this critical step of ensuring Symfony can write to `app/cache/` and `app/logs/` directories. It varies depending on your system but for OSX I like this one-liner which uses ACL (more powerful than standard unix permissions). These commands allow your shell user and the APACHEUSER (your webserver process) to write to the cache and log directories:
+
+*please note: I added line breaks after each command for readability, but it's still a one liner*
 
 ```
 $ rm -rf app/cache/*;
@@ -75,23 +89,23 @@ sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inhe
 sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 ```
 
-### git
+### Git
 
-It goes without saying you're going to use source control and it's probably going to be git which is good because it's basically required to use PagodaBox. It's not *actually* required, but this tutorial assumes it's "The Way™"
+It goes without saying you're going to use source control and it's probably going to be git which is good because it's basically required to use PagodaBox. It's not *actually* required, but this tutorial assumes it's "The Way™". Make sure you're in the root of your project and run:
 
 ```
 $ git init
 ```
 
-Symfony comes with a preconfigured .gitignore so your first commit should capture the initial state of the repository after installing via Composer.
+Symfony comes with a preconfigured .gitignore so your first commit should capture the initial state of your applicaiton after installation is complete.
 
 ```
 $ git add .
-$ git commit -m 'First'
+$ git commit -m 'Fresh Symfony 2.3.3'
 ```
 ### Add symlink option in composer.json
 
-This is one of those optional but is so good it should almost be default (it's probably Windows fault it's not) since it cuts down on redundant storage and directory parity. Each time you add a Bundle, which is Symfony's word for a module/package/installable-dependency, you'll often need to install it's assets and using symlinks means we don't have to re-install a Bundles assets if they change.
+This is one of those optional but it's so good it should almost be default (it's probably Windows fault it's not). This will cut down on redundant storage and easier directory parity. Say what? Basically each time you add a new Bundle - Symfony's word for a module or code package — you'll often need to install it's assets and using symlinks means we only have to "install" a Bundles assets once, not each time they change.
 
 In `composer.json` you'll see an "extra" section, add the following value pair (don't forget your JSON commas!):
 
@@ -101,114 +115,98 @@ In `composer.json` you'll see an "extra" section, add the following value pair (
 	"symfony-assets-install": "symlink"
 }
 ```
-You could use "relative" instead of "symlink", to generate relative symlinks but it's not necessary because of the way Symfony is configured and how we'll deploy to PagodaBox. I may eat my words later, but unless you plan to move your project around a lot on your local machine (why?) then absolute paths carry all of the certainly of the software mogul you are. Embrace inflexibility! Plus updating the symbolic links later is trivial.
+You could use "relative" instead of "symlink", to generate relative symlinks but it's not necessary because of the way Symfony is configured and how we'll deploy to PagodaBox. I may eat my words later, but unless you plan to move your project around a lot on your local machine (why?) then absolute paths carry all of the certainly of the software mogul you are. Plus updating the symbolic links later is trivial.
 
 ### Check your installation
 
-In your browser hop to `http://localhost/app_dev.php/` — you did point your Apache root at the `web/` directory, right? Then you should see the Welcome screen.
+In your browser hop to `http://localhost/app_dev.php/` — you did point your Apache root at the `web/` directory, right? Nice, you should see the Dev environemnt Welcome screen.
 
 You should also check your PHP configuration at `http://localhost/config.php`. There are often little things to configure, install, update depending how you install Apache and PHP. 
 
 
 ## Open up PagodaBox
 
-Signup for PagodaBox and login at `https://dashboard.pagodabox.com/` and create a new application
+If you haven't — duh, do it — sign up for PagodaBox and go to `https://dashboard.pagodabox.com/` and create a new application.
 
 ### Create your first application
 * select Empty Repo
 * name your app
 * select Git for deployment mode
 
-While the quickstarts are kind of a neat idea it's a lot better to select with an emtpy repo because it gives you flexibility about which version of Symfony you install (these instructions will probably work well with any 2.x version of Symfony).
+While the quickstarts are kind of a neat idea it's a I think it's easier to start with an emtpy repo because it gives you flexibility about which version of Symfony you install (these instructions will probably work well with any 2.x version of Symfony).
 
-When naming your application you need to pick a name that is globally unique to the PagodaBox service since this name will be used for the test domain generated for you. It doesn't need to match the domain you intend to host the site. The name is not terribly important, just pick something simple and memorable.
+When naming your application you need to pick a name that is globally unique to the PagodaBox service since this name will be used for the test domain generated for you. The name is not terribly important, it doesn't need to perfectly match the domain you intend to host the site, just pick something simple and memorable. 
 
-After you select Git as your deployment method you'll see some instrucitons that show you how to get some files into your app. Before you can configure your app you need to get some files into your PagodaBox git repository.
+After you select Git as your deployment method you'll see some instrucitons that show you how to get some files into your app. Before that let's start our Boxfile.
 
 ### The super cool Boxfile
 
-PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called [Boxfile](http://help.pagodabox.com/customer/portal/articles/175475) which is a YAML formatted configuration that specifies your deployment platform.
+PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called [Boxfile](http://help.pagodabox.com/customer/portal/articles/175475) which is a YAML formatted configuration simply named `Boxfile` that sits in the root of your app and specifies your production platform. Since it's part of your repo it's version controllable!
 
-Without getting into the nitty gritty this is my current Boxfile, for Symfony 2.3.3 verbaitm, with comments. Ignore the comments for now and make sure:
+Without getting into the nitty gritty this is a Boxfile I've succesfully used with Symfony 2.3.3 is below.
+
+This repo contains the most up to date copy of my suggested [Boxfile](http://Boxfile) along with a commented version called [Boxfile.comments](Boxfile.comments).
 
 ```
-web1:                            # <~~~ component type & number
+web1:
 
-    # ~~~ APACHE ~~~
+  document_root   : web
+  default_gateway : app.php
+  index_list      : [app.php]
 
-    document_root   : web       # <~~~ standard Symfony public folder
-    default_gateway : app.php
-    index_list      : [app.php]
+  shared_writable_dirs:    
+    - app/cache
+    - app/logs
 
-    # ~~~ PAGODA ~~~
+  apache_access_log : false
+  apache_error_log  : true
+  php_error_log     : true
+  php_fpm_log       : true
 
-    name: mfresh                # <~~~ your apps name
-    shared_writable_dirs:       
-        - app/cache             # <~~~ integral to Symfony
-        - app/logs    
+  php_version: 5.4.14
+  php_date_timezone: "America/Los_Angeles"
 
-    # Notes on 'shared_writable_dirs'
-    # After a build is triggered (usually after pushing) all directories are writable.
-    # Once the build finishes the you can only write to `shared_writable_dirs`
-    # which are shared across all instances of your app via a network tunnel. 
-    # More here: http://blog.doh.ms/2012/04/16/deploying-a-symfony2-and-composer-app-on-pagodabox/
-    # Worth noting that because of this `shared_writable_dirs` are destroyed on every build,
-    # while the rest of your app is not.
+  php_extensions:
+    - curl
+    - intl    
+    - mbstring
+    - mysql
+    - pdo_mysql
+    - xsl
+    - zip
 
-    # ~~~ PHP ~~~
+  zend_extensions:
+    - xcache
 
-    # ~ Check Symfony's requirements + recommendations:
-    # http://symfony.com/doc/master/reference/requirements.html
+  php_short_open_tag    : 0
+  php_session_autostart : 0
 
-    # ~ See which versions of PHP offered by PagodaBox
-    # http://help.pagodabox.com/customer/portal/articles/175475-understanding-the-boxfile#php-version
+  after_build:
+    - "curl -sS https://getcomposer.org/installer | php"
+    - "php composer.phar install --prefer-source --optimize-autoloader"
 
-    # ~ See which PHP extensions are offered for your version of PHP
-    # http://help.pagodabox.com/customer/portal/articles/175475-understanding-the-boxfile#php-Extensions
-
-    # ~ iconv, posix, tokenizer, xml, ctype extensions are installed by default
-
-    php_version: 5.4.14
-    php_date_timezone: "America/Los_Angeles" # <~~~ use your own
-    php_extensions:                          
-        - apc      
-        - curl
-        - intl        
-        - mbstring
-        - mysql
-        - pdo_mysql
-        - xsl
-        - zip
-    php_session_autostart:  Off
-    php_short_open_tag:     Off
-    magic_quotes_gpc:       Off
-    register_globals:       Off # <~~~ should be off by default, nice to be explicit
-
-    # ~~~ COMMAND HOOKS ~~~
-
-    after_build:
-        - "curl -sS https://getcomposer.org/installer | php"
-        - "php composer.phar install --prefer-source"   # this will prevent re-downloading of github sources
-        - "php composer.phar dump-autoload --optimize" # see http://getcomposer.org/doc/03-cli.md#dump-autoload
-
-    after_deploy:
-        - "php app/console router:debug --env=prod" # helpful reminder
+  after_deploy:
+    - "php app/console cache:clear --env=prod --no-debug"
+    - "php app/console router:debug --env=prod"
 
 ```
 
 ### Add PagodaBox as a remote repository
 
-Back in your local symfony installation run the following commands, making sure to change `myapp.git` to your apps name `.git`
+Back in local run the following commands, making sure to change `myapp.git` to the `name-of-your-application-on-PagodaBox.git`
 
 ```
 $ git remote add pagoda git@git.pagodabox.com:myapp.git
 $ git push -u pagoda --all
 ```
-If you setup your remote correctly than after you did `git push` you will see a bunch of output on your screen, which means you've succesfully deployed your first app!
+If you setup your remote correctly than the after that git push above you'll see a stream of output on your screen like "Building Infastructure", which means you're watching your app being succesfully deployed for the first time! Deployment just means making code live, although it's a little more than your typical FTP trasnfer, which we'll see.
 
-**Aside about git push above:** `-u` flag makes `pagoda` the default remote so when you `git push` in the future you can ommit typing pagoda. The `--all` flag pushes all branches (all referneces, which includes tags) and is optional but it's good to have your entire repo hosted in the cloud as a backup. I'm pretty sure git is configured to push all refs by default but I've configured it not to so the `--all` flag is is a good reminder to do this.
+Now whenever you `git push` your master branch to the pagoda remote it will (re)build and then deploy your new app immediately — pretty powerful! You can choose a different branch or completely turn this behavior off (there are many options for deployment) but for now assume that `git push` is synomous with deploying new versions of your app. What's cool is that if your build fails your app won't go down since PagodaBox keeps your pervious build running right unitl your new build completes succesfully so there should be little to no downtime.
 
-Now each time you `git push` PagodaBox will build your app with the new changes and deploy it live — pretty powerful! You can change this behavior if you want, but for now assume that `git push` is the defacto way to deploy your app. What's cool is that if your build fails your app won't go down, since PagodaBox keep your pervious build running right unitl your new build completes succesfully and is ready to swap in.
+**Aside about git push above:** the `-u` flag makes `pagoda` the default remote (on a per branch basis) so when you `git push` in the future you can ommit typing pagoda. The `--all` flag pushes all branches (all referneces, which includes tags too I think) and is optional but nice it's nice to have your entire repo hosted in the cloud as a backup. I'm pretty sure git is configured to push all refs by default but I've configured it not to so the `--all` flag is is a good reminder to do this.
+
+The rest of this document are is an outline with fragment which I'm currently working on
+===
 
 ### Configure your app
 

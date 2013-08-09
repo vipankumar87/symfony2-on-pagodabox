@@ -1,0 +1,40 @@
+web1:
+
+  document_root   : web
+  default_gateway : app.php
+  index_list      : [app.php]
+
+  shared_writable_dirs:    
+    - app/cache
+    - app/logs
+
+  apache_access_log : false
+  apache_error_log  : true
+  php_error_log     : true
+  php_fpm_log       : true
+
+  php_version: 5.4.14
+  php_date_timezone: "America/Los_Angeles"
+
+  php_extensions:
+    - curl
+    - intl    
+    - mbstring
+    - mysql
+    - pdo_mysql
+    - xsl
+    - zip
+
+  zend_extensions:
+    - xcache
+
+  php_short_open_tag    : 0
+  php_session_autostart : 0
+
+  after_build:
+    - "curl -sS https://getcomposer.org/installer | php"
+    - "php composer.phar install --prefer-source --optimize-autoloader"
+
+  after_deploy:
+    - "php app/console cache:clear --env=prod --no-debug"
+    - "php app/console router:debug --env=prod"
