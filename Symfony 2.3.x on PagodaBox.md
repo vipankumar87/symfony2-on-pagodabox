@@ -3,7 +3,7 @@ Symfony 2.3.x on PagodaBox
 
 ### This is a work in progress
 
-The aim of this document is to record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. 
+The aim of this document is to record my process of getting a Symfony2 app up running on PagodaBox with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. **Feedback is welcome.**
 
 This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
 
@@ -11,26 +11,30 @@ This is written from the perspective of using the bash shell on OSX — extrapol
 
 * Currently working with Symfony 2.3.3
 
-## Start locally with these tools
-===
+## Start locally
+================
 
-We'll create a skeleton app locally, and then push it to PagodaBox.
+PagodaBox offers [Quickstarts](https://dashboard.pagodabox.com/apps/new?search=symfony) for various frameworks but I'd recommend not using any Quickstart that forks the Symfony core —  I think providing source code is a job best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox.
+
+### Local Requriments
 
 This tutorial requires familiarity with the standard Symfony stack:
 
-* Apache
-* PHP (as an Apache module and command line tool)
-* MySQL
-* git
-* Composer
+* Apache 2
+* PHP 5.3.3+ (as an Apache module and command line tool)
+* MySQL (not sure about the min version)
+* Git (whatever is newest)
+* Composer (always the newest)
 
-It goes without saying you're going to want to create a high parity between your (local) development environment and your PagodaBox production environment. As such you should know what your local environment looks like.
+Personally I use MAMP Pro to manage Apache/MySQL/PHP (I've never found anything simpler). I use Pear for php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer via their standard cURL method.
+ 
+It goes without saying you're going to want to create a high parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) becuase some extensions require building from source (like [intl](http://))
+
+Some extensions — like Xdebug — are best left off the production server but in general you should aim to ensure that boths stacks match with the same major version and hopefully minor version of each extension.
 
 
 ## Create a Symfony project with Composer
-===
-
-PagodaBox 
+=========================================
 
 You can name your project anything, I chose "fresh".
 
