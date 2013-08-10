@@ -1,4 +1,4 @@
-## Get Composer
+## Composer
 
 - Make sure you have the PHP command line tool available
 `$ which php`
@@ -8,3 +8,7 @@
 `$ curl -sS https://getcomposer.org/installer | php`
 - You'll know it worked it if you see **composer.phar**
 `$ ls -l | egrep composer`
+
+## composer.json
+
+## composer.lock

@@ -1,15 +1,21 @@
 Symfony2 on PagodaBox
 ====================
 
-This repository contains a markdown guide with a boilerplate Boxfile for setting up and deploying a Symfony 2.x applicaiton on PagodaBox. The goal is to stay complete with each minor version of Symfony starting at 2.3.x.
+This repository contains documentation and basic boilerplate code. The goal is to document the shortest path to a well configured Symfony 2.x applicaiton deployed on PagodaBox. The goal is to test and stay current with each minor version starting at Symfony 2.3.x. While I will keep the techinical details specific to PagodaBox I'll try and outline the general concepts, which will be readily adapted to other production/deployment environments.
 
 ### What's what:
 
-* Guide: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
-* Boilerplate: [Boxfile](Boxfile) `||` [Boxfile.comments](Boxfile.comments)
+* Main: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
+* Boilerplate: 
+  - [Boxfile](Boxfile) `||` with comments: [Boxfile.comments](Boxfile.comments) `&&` documented (in process): [Boxfile.md](Boxfile.md)
+  - envvars bash script
+* Extras: 
+  - [About Composer.md](About%20Composer.md)
+  - Local Dev
+  - Database Tools
 
 ### Why Symfony2 and PagodaBox?
 
-**Symfony** is a web application framework written in php that caught my eye in 2012 when I was all but convinced it was Rails or bust. A reputable php developer turned me on to Symfony and the Composer package manager and suddenly the future of php started looking a whole lot brighter. Symfony encourages modular code and strikes a nice balance between flexibility and convention. Symfony has a strong community and lots of tools that solve many of the common needs of a robust web application. Don't expect any magic unicorns to fly-in and solve problem behind the scenes — it comes preconfigured with nice defaults but there a bunch of really cool skills to learn in order to leverage the framework.
+**Symfony2** is a php web application framework that caught my eye in early 2012. It encourages modularity, reusablity, sharing, testing, automation, beautiful code and is optimized for speed and scaling. Symfony, Composer and the other projects form a great community that makes tools that solve common needs of a robust web application, written in code that I love to study and learn from. No magic unicorns but Symfony comes preconfigured with nice defaults. It's loosely coupled architecture gives you flexiblity and the onus of learning how the parts fit togehter. To this end I will write with the 80:20 rule in mind becuase the strength of an application framework is following convention until you know enough to break from it.
 
-**PagodaBox** is a Platform as a Service (acrobuzz: PaaS) that specicialzes in PHP and allows you to create basic applications for free so you can test it's services and then if you want to scale you can start paying for increased capabilities. Try before you buy, man. It has a really cool modular component architecture that allows you to augment and scale your app in really interesting ways. Of all of the PaaSs I've played with I found PagodaBox to have the right mix of tools and workflow for deploying a Symfony application, especially because they've offered PHP 5.4 before others and by default you can use Composer with little friction. Also, let's not pretend that the robot branding isn't totally awesome and probably tipped the scale.
+**PagodaBox** is a Platform as a Service (acrobuzz: PaaS) that specicialzes in PHP and allows you to create basic applications for free so you can test it's services and then as you want to scale you can start paying for increased capabilities. Try before you buy, man. It has a really cool modular component architecture that allows you to augment and scale your app in really interesting ways. Of all of the PaaSs I've played with I found PagodaBox to have the right mix of tools and workflow for deploying a Symfony application, especially because they've offered PHP 5.4 before others and by default you can use Composer with little friction. Also, let's not pretend that the robot branding isn't totally awesome and largely tips the scales in their favor.
