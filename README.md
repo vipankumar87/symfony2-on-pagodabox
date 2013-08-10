@@ -1,7 +1,6 @@
-Symfony2 on PagodaBox
-====================
+## Symfony2 on PagodaBox
 
-This repository contains documentation and basic boilerplate code. The goal is to document the shortest path to a well configured Symfony 2.x applicaiton deployed on PagodaBox. The goal is to test and stay current with each minor version starting at Symfony 2.3.x. While I will keep the techinical details specific to PagodaBox I'll try and outline the general concepts, which will be readily adapted to other production/deployment environments.
+This repository contains documentation and basic boilerplate code. The goal is to document the shortest path to a well configured Symfony 2.x applicaiton deployed on PagodaBox by testing and revising for each minor version starting with Symfony 2.3.x. While I will keep the techinical details specific to PagodaBox the general concepts should be adaptable to other production/deployment environments.
 
 ### What's what:
 
