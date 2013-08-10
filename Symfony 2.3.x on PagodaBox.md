@@ -3,21 +3,23 @@ Symfony 2.3.x on PagodaBox
 
 ### This is a work in progress
 
-The aim of this document is to learn by teaching and record my process of getting a [Symfony 2](http://symfony.com/) application running on [PagodaBox](http://pagodabox.com/) with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. 
+The aim of this document is to learn by teaching and record my process of getting a <a href="http://symfony.com/" target="_new">Symfony 2</a> application running on <a href="http://pagodabox.com/" target="_new">PagodaBox</a> with minimum friction, solid performance, and ease of continous developemnt / deployment cycles. 
 
-**Feedback is welcome.**
+**Feedback is Welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
 This is written from the perspective of using the bash shell on OSX — extrapolate if your OS is different.
 
-### In this document
+### Heads up about convetions I use
 
 #### "$" for shell commands
 
 Throughout this document I'll follow the convention of representing your shell prompt with a '$', so if you see a command like `$ cd/path/to` you would copy 'cd/path/to' into your prompt and execute it.
 
-#### Composer — the PHP Dependency Managemer
+Also, unless noted commands are assumed to be run inside the root folder of your local Symfony project.
 
-Hopefully you've already been using Composer, which is a tool for grabbing and installing open source php packages. Throughout this document I'll use `$ composer` because I've installed it [globally](http://getcomposer.org/doc/00-intro.md#globally). If you install it [locally](http://getcomposer.org/doc/00-intro.md#locally) (i.e. per project) than you'll want to use `$ php composer.phar` — just a heads up.
+#### Composer (php dependency manager) usage
+
+Hopefully you've already been using Composer, a tool for grabbing and installing open source php packages. Throughout this document I'll use `$ composer` because I've installed it <a href="http://getcomposer.org/doc/00-intro.md#globally" target="_new">globally</a>. If you install it <a href="http://getcomposer.org/doc/00-intro.md#locally" target="_new">locally</a> (i.e. per project) than you'll use `$ php composer.phar` instead.
 
 ### Tested with
 
@@ -27,21 +29,21 @@ Hopefully you've already been using Composer, which is a tool for grabbing and i
 Start locally
 =============
 
-PagodaBox offers [Quickstarts](https://dashboard.pagodabox.com/apps/new?search=symfony) for various frameworks but I'd recommend not using any Quickstart that forks the Symfony core —  I think providing source code is a job best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox.
+PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> for various frameworks but I'd recommend not using any Quickstart that forks the Symfony core —  I think providing source code is a job best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox.
 
 ### Local Requriments
 
 This tutorial assumes you're using the standard Symfony stack:
 
 * Apache 2
-* PHP 5.3.3+ (as an Apache module and command line tool)
+* PHP 5.3.3+ (as an Apache module *and* command line tool)
 * MySQL (not sure about the min version)
 * Git (whatever is newest)
 * Composer (always the newest)
 
-Personally I use MAMP Pro to manage Apache/MySQL/PHP, but I've been meaning to switch to Vagrant. I use Pear to manage php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer uses it's own cURL method and self-update command.
+Personally I use MAMP Pro to manage Apache/MySQL/PHP, but I've been meaning to switch to Vagrant. I use Pear to manage php extnesions, which requires <a href="http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion" target="_new">some extra config for MAMP</a>. I install Git with Homebrew and Composer uses it's own cURL method and self-update command.
 
-It goes without saying you're going to want to maximize parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) because some extensions require building from source (like [intl](http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer)).
+It goes without saying you're going to want to maximize parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) because some extensions require building from source (like <a href="http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer" target="_new">intl</a>).
 
 Some extensions — like Xdebug — are best left off the production server but in general you should aim to ensure that boths stacks match with the same major version and hopefully minor version of each extension.
 
@@ -81,7 +83,7 @@ You can `$ ls -lAGh` for Unixy or `$ open .` for OSXy glimpse at all your fresh 
 
 ### Set permissions for cache and logs
 
-There are a [few options](http://symfony.com/doc/master/book/installation.html#configuration-and-setup) for this critical step of ensuring Symfony can write to `app/cache/` and `app/logs/` directories. It varies depending on your system but for OSX I like this one-liner which uses ACL (more powerful than standard unix permissions). These commands allow your shell user and the APACHEUSER (your webserver process) to write to the cache and log directories:
+There are a <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">few options</a> for this critical step of ensuring Symfony can write to `app/cache/` and `app/logs/` directories. It varies depending on your system but for OSX I like this one-liner which uses ACL (more powerful than standard unix permissions). These commands allow your shell user and the APACHEUSER (your webserver process) to write to the cache and log directories:
 
 *please note: I added line breaks after each command for readability, but it's still a one liner*
 
@@ -130,7 +132,7 @@ You should also check your PHP configuration at `http://localhost/config.php`. T
 
 ## Open up PagodaBox
 
-If you haven't sign up for PagodaBox and go to `https://dashboard.pagodabox.com/` and create a new application.
+If you haven't already, sign up for PagodaBox and head to your dashboard `https://dashboard.pagodabox.com/` where we'll create a new application.
 
 ### Create your first application
 * select Empty Repo
@@ -145,11 +147,11 @@ After you select Git as your deployment method you'll see some instrucitons that
 
 ### The super cool Boxfile
 
-PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called [Boxfile](http://help.pagodabox.com/customer/portal/articles/175475) which is a YAML formatted configuration named `Boxfile` that sits in the root of your app and specifies your production platform. Since it's part of your repo it's version controlled, which is awesome when you need to rollback your app or switch between branches with different configurations (if that's your thing)!
+PagodaBox is one of my favorite PaaS options for PHP because they have a neat configuration system called <a href="http://help.pagodabox.com/customer/portal/articles/175475" target="_new">Boxfile</a> which is a YAML formatted configuration named `Boxfile` that sits in the root of your app and specifies your production platform. Since it's part of your repo it's version controlled, which is awesome when you need to rollback your app or switch between branches with different configurations (if that's your thing)!
 
 Without getting into the nitty gritty below is a Boxfile I've successfully used to deploy a barebones Symfony 2.3.3 app on PagodaBox.
 
-This repo contains the most up to date copy of my suggested [Boxfile](http://Boxfile) along with a commented version called [Boxfile.comments](Boxfile.comments).
+This repo contains the most up to date copy of my suggested <a href="http://Boxfile" target="_new">Boxfile</a> ()along with a commented version called <a href="Boxfile.comments" target="_new">Boxfile.comments</a>.
 
 ```
 web1:
@@ -193,7 +195,7 @@ web1:
     - "php app/console cache:clear --env=prod --no-debug"
     - "php app/console router:debug --env=prod"
 
-```
+``)`
 
 ### Add PagodaBox as a remote repository
 
@@ -209,8 +211,18 @@ Now whenever you `git push` your master branch to the pagoda remote it will (re)
 
 **Aside about git push above:** the `-u` flag makes `pagoda` the default remote (on a per branch basis) so when you `git push` in the future you can ommit typing pagoda. The `--all` flag pushes all branches (all referneces, which includes tags too I think) and is optional but nice it's nice to have your entire repo hosted in the cloud as a backup. I'm pretty sure git is configured to push all refs by default but I've configured it not to so the `--all` flag is is a good reminder to do this.
 
-The rest of this document are is an outline with fragment which I'm currently working on
-===
+##The rest of this document are is an outline with fragments I'm currently working on
+
+### Install a database
+
+- Go to PagdoaDashboard
+- Click add Database, select MySQL and pick a name (or let one be auto-generated)
+	- I've noticed that creating a databse will often make the dashboard hang, just refresh it after a minute or so
+
+### Using MySQL Workbench (or another DBA terminal)
+- install <a href="http://www.mysql.com/products/workbench/" target="_new">MySQL Workbench</a> (you need to start a free acount)
+- install the pagoda cli `$ gem install pagoda`
+- from your app root `$ pagoda tunnel -c [dbname]`
 
 ### Configure your app
 
