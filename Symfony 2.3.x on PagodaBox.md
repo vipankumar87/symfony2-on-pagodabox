@@ -17,7 +17,7 @@ Throughout this document I'll follow the convention of representing your shell p
 
 #### Composer — the PHP Dependency Managemer
 
-Throughout this document I'll use `$ composer` because I've installed it [globally](http://getcomposer.org/doc/00-intro.md#globally). If you install it [locally](http://getcomposer.org/doc/00-intro.md#locally) (i.e. per project) than you'll want to use `$ php composer.phar` — just a heads up.
+Hopefully you've already been using Composer, which is a tool for grabbing and installing open source php packages. Throughout this document I'll use `$ composer` because I've installed it [globally](http://getcomposer.org/doc/00-intro.md#globally). If you install it [locally](http://getcomposer.org/doc/00-intro.md#locally) (i.e. per project) than you'll want to use `$ php composer.phar` — just a heads up.
 
 ### Tested with
 
@@ -39,7 +39,7 @@ This tutorial assumes you're using the standard Symfony stack:
 * Git (whatever is newest)
 * Composer (always the newest)
 
-Personally I use MAMP Pro to manage Apache/MySQL/PHP (I've never found anything simpler). I use Pear for php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer via their standard cURL method.
+Personally I use MAMP Pro to manage Apache/MySQL/PHP, but I've been meaning to switch to Vagrant. I use Pear to manage php extnesions, which requires [some extra config for MAMP](http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion). I install Git with Homebrew and Composer uses it's own cURL method and self-update command.
 
 It goes without saying you're going to want to maximize parity between your local development environment and your PagodaBox production environment. Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain (has been for me) because some extensions require building from source (like [intl](http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer)).
 
@@ -62,22 +62,22 @@ After all the vendors are downloaded — you will get prompted to provide some v
 
 Here's an overview of the prompts with the `defaults` you'll probably see:
 
-- **database_driver:** `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
-- **database_host:** `127.0.0.1` we'll configure this as an EnvVar later
-- **database_port:** `null` ditto EnvVar
-- **database_host:** `symfony` ditto EnvVar
-- **database_user:** `127.0.0.1` ditto EnvVar
-- **database_password:** `127.0.0.1 `ditto EnvVar
-- **mailer_transport:** `smtp` only needed if you intend to use Symfony's mail component
-- **mailer_host:** `127.0.0.1` ditto
-- **mailer_host:** `null` ditto
-- **mailer_host:** `null` ditto
-- **locale:** `en` This optional prefix refers to the default language of your site (ToDO: check if it's a convention or a specificaiton)
-- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different Terminal window) $ md5 -s 'put a random phrase here'
+- database_driver: `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
+- database_host: `127.0.0.1` we'll configure this as an EnvVar later
+- database_port: `null` ditto EnvVar
+- database_host: `symfony` ditto EnvVar
+- database_user: `127.0.0.1` ditto EnvVar
+- database_password: `127.0.0.1 `ditto EnvVar
+- mailer_transport: `smtp` only needed if you intend to use Symfony's mail component
+- mailer_host: `127.0.0.1` ditto
+- mailer_host: `null` ditto
+- mailer_host: `null` ditto
+- locale: `en` This optional prefix refers to the default language of your site (ToDO: check if it's a convention or a specificaiton)
+- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different shell session) `$ md5 -s 'put a random phrase here'`
 
 With the parameters configured the Symfony installer runs a few more commands and assuming there were no errors we're off to a good start!
 
-You can `$ ls -lAGh` or `$ open .` (on osx) or `$ tree` (just 'brew install tree') to see what got installed.
+You can `$ ls -lAGh` for Unixy or `$ open .` for OSXy glimpse at all your fresh new source code.
 
 ### Set permissions for cache and logs
 
@@ -283,4 +283,10 @@ update .gitignore to allow
 #/vendor/
 /bin/
 /composer.phar
+```
+
+### Make some demo content quick
+
+```
+$ php app/console generate:bundle --namespace=ixel/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
 ```
