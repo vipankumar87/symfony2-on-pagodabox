@@ -2,13 +2,15 @@
 
 This repository contains documentation and basic boilerplate code. The goal is to document the shortest path to a well configured Symfony 2.x applicaiton deployed on PagodaBox by testing and revising for each minor version starting with Symfony 2.3.x. While I will keep the techinical details specific to PagodaBox the general concepts should be adaptable to other production/deployment environments.
 
-### What's what:
+### Guides
 
-* Main: [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
-* Boilerplate: 
-  - [Boxfile](Boxfile) `||` with comments: [Boxfile.comments](Boxfile.comments) `&&` documented (in process): [Boxfile.md](Boxfile.md)
+* [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
+
+### Boilerplate
+  - [Boxfile](Boxfile) `+` [About Boxfile.md](Boxfile.md) (documented: in process)
   - envvars bash script
-* Extras: 
+  
+### Extras
   - [About Composer.md](About%20Composer.md)
   - Local Dev
   - Database Tools

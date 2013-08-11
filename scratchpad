@@ -1,2 +1,5 @@
 RegEx to kill comments: [ ]+(#.+)
 RegEx to kill empty lines: ^[\s]+$
+RegEx to replace markdown links to html with target=_new:
+	\[(.+?)\]\((.+?)\) 
+	<a href="$2" target="_new">$1</a>
