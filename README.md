@@ -7,7 +7,7 @@ This repository contains documentation and basic boilerplate code. The goal is t
 * [Symfony 2.3.x on PagodaBox.md](Symfony%202.3.x%20on%20PagodaBox.md)
 
 ### Boilerplate
-  - [Boxfile](Boxfile) `+` [About Boxfile.md](About Boxfile.md) (documented: in process)
+  - [Boxfile](Boxfile) `+` [About Boxfile.md](About Boxfile.md) (in process)
   - envvars bash script
   
 ### Extras
