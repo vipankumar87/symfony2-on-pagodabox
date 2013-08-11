@@ -1,14 +1,33 @@
+The elements of a Boxfile
+===
+
+This document is a messy stub. Read with caution.
+
+## Component id
+
+New applicaitons all default to a single web compoennt, so 
+
+```
+web1:
+```
+
+## Optionally add custom env vars
+
+[http://help.pagodabox.com/customer/portal/articles/175470](http://help.pagodabox.com/customer/portal/articles/175470)
+
+```
 global:
-  env:             # ~ Optionally add custom env vars
-    - PARTY: pizza # http://help.pagodabox.com/customer/portal/articles/175470
+  env:
+    - PARTY: pizza
+```
 
-web1:              # component type & number
+## Apache
 
-  # ~~~ APACHE ~~~
-
+```
   document_root   : web # Symfony's standard public folder
   default_gateway : app.php
   index_list      : [app.php]
+```
 
   # ~~~ PAGODA ~~~
 
