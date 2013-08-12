@@ -9,24 +9,24 @@ The aim of this document is to learn by teaching and record my process of gettin
 
 ### This document tested against
 
-* August 9, 2013: known to work with Symfony 2.3.3
+* August 12, 2013: known to work with Symfony 2.3.3
 
 
 ## Convetions on the Command Line
 
-#### The dollar sign `$` is your prompt
+#### The dollar sign `$` is your shell prompt
 
-Throughout this document I'll follow the convention of representing your shell prompt as`$`, so if you see a block like `$ cd path/to` you know it's a shell command which you'd copy/type into your prompt as `cd path/to` and then hit enter to run. 
+Throughout this document I'll follow the convention of representing your shell prompt as`$`, so if you see a block like `$ cd path/to` you'd enter and execute `cd path/to` at your shell prompt. Shell is equvilant to saying command line.
 
 Once your project folder is created (coming up soon), all commands are assumed to be run in the root folder of your local Symfony project… there may be some exceptions, but I'll make sure and point them out.
 
-#### I type `composer` instead of `php composer.phar`
+#### I'll use `composer` instead of `php composer.phar`
 
-Maybe you're already familiar with Composer, a tool for grabbing and installing open source php packages. Throughout you'll see commands like `$ composer …` because I've installed it <a href="http://getcomposer.org/doc/00-intro.md#globally" target="_new">globally</a> but typically Composer examples (on the Symfony website, et al) assume you've installed it <a href="http://getcomposer.org/doc/00-intro.md#locally" target="_new">locally</a>, in which case you'll use `$ php composer.phar …` instead. I simply prefer typing `composer` because it's consisitent with the usage of other command line tools. Install and use it whichever way you like.
+Maybe you're already familiar with Composer, a tool for grabbing and installing open source php packages. Throughout you'll see commands like `$ composer …` because I've installed it <a href="http://getcomposer.org/doc/00-intro.md#globally" target="_new">globally</a> but typically Composer examples (on the Symfony website, et al) assume you've installed it <a href="http://getcomposer.org/doc/00-intro.md#locally" target="_new">locally</a>, in which case you'd use `$ php composer.phar …` instead. I simply prefer typing `composer` because it's consisitent with the usage of other command line tools. Install and use it whichever way you like.
 
 #### `[editor]` is your text editor of choice
 
-SublimeText — like many OSX text editors — allows you to open files from the command line by <a href="http://www.sublimetext.com/docs/2/osx_command_line.html" target="_new">installing a nifty tool</a> called `subl` used like: `$ subl app/config/paramters.yml` — since your editor may be different I'll use `$ [editor] app/config/paramters.yml` to mean open the file `app/config/paramters.yml` in your favorite text editor (path relative to the root of your project folder).
+SublimeText, like many OSX text editors, has a nifty command line helper (<a href="http://www.sublimetext.com/docs/2/osx_command_line.html" target="_new">how to install it</a>) named `subl` that allows you to open files like so: `$ subl app/config/paramters.yml`. Since your may use a different editor I'll use `$ [editor] app/config/paramters.yml` to mean open the file `app/config/paramters.yml` in your preferred text editor — path relative to the root of your project folder.
 
 
 ## Start locally
@@ -50,7 +50,7 @@ along with these essential command line tools:
 
 I've been meaning to try out Vagrant but personally I use MAMP Pro to manage Apache / MySQL / PHP locally — it just makes sense to me. I use Pear to manage php extensions, and Pear requires <a href="http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion" target="_new">some config to work with MAMP</a>. I install Git with Homebrew. Composer uses it's own cURL method and self-update command.
 
-**My editing tools:** 
+**My development toolbox:** 
 
 - SublimeText
 - PhpStorm
@@ -69,23 +69,6 @@ $ composer create-project symfony/framework-standard-edition fresh/ 2.3.3 --no-i
 $ cd fresh
 ``` 
 Running create-project grabs the core Symfony files and then runs `composer install` which simply looks at the `composer.json` file (included with Symfony's core) and installs all of the dependencies listed. These get installed in `vendor/` which is a default convention for keeping external code organized.
-
-After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file which resides at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values except for 'secret' which you'll want to provide something unique. We'll revisit paramtes.yml later since we'll use Apache Environment Variables (EnvVar) to make maintaining differences between our local and PagodaBox setups easier (more on this later).
-
-Here's an overview of the prompts with the `defaults` you'll probably see:
-
-- database_driver: `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
-- database_host: `127.0.0.1` we'll configure this as an EnvVar later
-- database_port: `null` ditto EnvVar
-- database_host: `symfony` ditto EnvVar
-- database_user: `127.0.0.1` ditto EnvVar
-- database_password: `127.0.0.1 `ditto EnvVar
-- mailer_transport: `smtp` only needed if you intend to use Symfony's mail component
-- mailer_host: `127.0.0.1` ditto
-- mailer_host: `null` ditto
-- mailer_host: `null` ditto
-- locale: `en` This optional prefix refers to the default language of your site (ToDo: check if it's a convention or a specificaiton)
-- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different shell session) `$ md5 -s 'put a random phrase here'`
 
 ### Parity
 
@@ -313,3 +296,22 @@ update .gitignore to allow
 ```
 $ php app/console generate:bundle --namespace=ixel/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
 ```
+
+### paramters.yml
+
+After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file which resides at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values except for 'secret' which you'll want to provide something unique. We'll revisit paramtes.yml later since we'll use Apache Environment Variables (EnvVar) to make maintaining differences between our local and PagodaBox setups easier (more on this later).
+
+Here's an overview of the prompts with the `defaults` you'll probably see:
+
+- database_driver: `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
+- database_host: `127.0.0.1` we'll configure this as an EnvVar later
+- database_port: `null` ditto EnvVar
+- database_host: `symfony` ditto EnvVar
+- database_user: `127.0.0.1` ditto EnvVar
+- database_password: `127.0.0.1 `ditto EnvVar
+- mailer_transport: `smtp` only needed if you intend to use Symfony's mail component
+- mailer_host: `127.0.0.1` ditto
+- mailer_host: `null` ditto
+- mailer_host: `null` ditto
+- locale: `en` This optional prefix refers to the default language of your site (ToDo: check if it's a convention or a specificaiton)
+- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different shell session) `$ md5 -s 'put a random phrase here'`
