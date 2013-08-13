@@ -1,4 +1,4 @@
-## Symfony2 on PagodaBox
+## Deploying Symfony2 on PagodaBox
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 

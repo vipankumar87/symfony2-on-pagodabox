@@ -4,7 +4,7 @@ Preface
 
 ## Command Line
 
-While the commands I use should be portable throughout *nix it's worth noting all commands are written to work with the standard **bash** shell on OSX (i.e the "Terminal" application). Extrapolate if your OS is different.
+While the commands I use should be portable throughout \*nix it's worth noting all commands are written to work with the standard **bash** shell on OSX (i.e the "Terminal" application). Extrapolate if your OS is different.
 
 Also, I'm just starting to get the hang of bash, so I've tried to keep commands fairly terse while being easy to change. Sometimes I compress multiple commands on one line, which I know is harder to follow if you're new to the command line. 
 
