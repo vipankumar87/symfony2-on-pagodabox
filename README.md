@@ -8,7 +8,7 @@ I started this repository to document a reproducibile, low friction workflow for
 
 * [Preface.md](guides/Preface.md)
 * [Symfony 2.3.x on PagodaBox - Guide.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)<br/>`&&` [Symfony 2.3.x on PagodaBox - Cheatsheet.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)
-* [Production & Local Parity.md](guides/Server%20%26%20Local%20Parity.md)
+* [Production & Local Parity.md](guides/Production%20&%26Local%20Parity.md)
 
 ### Boilerplate
   - [Boxfile](boilerplate/Boxfile) `&&` [About Boxfile.md](guides/About Boxfile.md)
