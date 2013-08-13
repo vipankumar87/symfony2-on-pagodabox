@@ -7,7 +7,7 @@ Symfony 2.3.x on PagodaBox, a guide
 
 ## Preface
 
-Check out [Preface.md](Preface.md) if anything you see doesn't make sense.
+Check [Preface.md](Preface.md) if something doesn't make sense.
 
 ## Start locally
 
@@ -17,32 +17,32 @@ PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfon
 
 
 You can name your project anything, I chose `fresh`.<br/>
-Replace with your project name in the commands that follow.
+Use your project name in the commands that follow.
 
 ```
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . 2.3.3 --no-scripts
 ``` 
-This will download the Symfony core, install it's dependencies and skip the usual install scripts which we'll do in a couple of minutes.
+This will download the Symfony core, install it's dependencies and skip the usual install scripts for now.
 
 ### Set permissions for `app/cache` and `app/logs`
 
-There are a <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">few ways</a> to do this. I like this one-liner which uses ACL (more flexible than standard unix permissions).
+There are a <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">few ways</a> to do this. I like this one-liner, which uses ACL (more flexible than standard unix permissions).
 
 ```
 $ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
 chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 ```
-Start Apache, or you'll see an error like *chmod: Invalid entry format…* in which case remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case it's `_www`).
+If Apache isn't running you'll see an error like *chmod: Invalid entry format…* in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case it's `_www`).
 
 ### Initialize your Git repo
 
-Symfony comes with a preconfigured `.gitignore` so your first commit should capture the initial state of your applicaiton code before we do any customization.
+Symfony comes with a good `.gitignore` so let's capture the initial state of the applicaiton code before we doing any work.
 
 ```
 $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
 
-Not only will we use git to track the history of our app, we'll use it to deploy our app on PagodaBox. Deploy just means make a certian version live. Using git is awesome becuase it makes reverting state and versioning really seamless.
+Not only will git track the our development history, we'll use it to deploy our app on PagodaBox. Deploy just means make a certain version live. Using git is awesome for version based deployment, as we'll see.
 
 ### Ensure intl extension parity via composer.json
 
@@ -60,7 +60,7 @@ Currently
 
 ### Optionally add symlink option in composer.json
 
-I like to add install assets with symlinks, add this to "extra" in `composer.json` (don't forget your json comma!):
+I like to install assets with symlinks, add this to "extra" in `composer.json` (don't forget your json comma!):
 
 ```
 "extra": {
@@ -100,9 +100,9 @@ parameters:
 ```
 The values marked with precentages `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
 
-### Create envvars.sh script for our shell
+### Create envvars.sh shell script
 
-Add `envvars.sh` to .gitignore and then start editing this file
+Add `envvars.sh` to .gitignore and start editing
 
 ```
 $ sed -i -e '$a\' .gitignore && echo 'envvars.sh' >> .gitignore && rm .gitignore-e && $EDITOR envvars.sh
@@ -124,7 +124,7 @@ Close, save, and run the script:
 ```
 $ . ./envvars.sh
 ```
-Now these variables are available to the shell, which vital for certian `app/console` commands. You'll want to run this script each time you restart your shell and are working on this project.
+Now these variables are available in the shell, which will be crucial for many `app/console` commands. You'll want to run envvars.sh once per shell session when working on this project.
 
 
 ### Now run the install scripts
@@ -133,18 +133,18 @@ With variables exported we can safely run the install scripts. We'll skip the in
 ```
 $ SYMFONY__OTHER__SECRET=blank && composer install --no-interaction
 ```
-**Notice** I prepended a shim which is be needed this once; see next.
+**Notice** I prepended a shim which we need just once; see next.
 
 ### Update secret in paramters.yml
 
-Now that `paramters.yml` has been generated we'll customize `secret:` to something secret. You can use this one liner (just provide your own phrase):
+With `app/config/paramters.yml` generated we'll customize `secret:` to something secret. Use this one-liner (just provide your own phrase):
 
 ```
 $ SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
 ```
 or change the secret manually: `$ $EDITOR app/config/parameters.yml`.
 
-### Add the environment variables to local Apache
+### Add the environment vars to local Apache
 
 Since the command line and web server are different processes we'll make the same values available to Apache with the `SetEnv` directive.
 
@@ -155,15 +155,15 @@ SetEnv  SYMFONY__DATABASE__PORT value
 SetEnv  SYMFONY__DATABASE__USER value
 SetEnv  SYMFONY__DATABASE__PASS value
 ```
-You'll want to update each value to match `envvars.sh` and add this to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHosts</a> block in httpd.conf.
+Update each value to match `envvars.sh` (notice no equals sign here) and add these directives to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHost</a> in httpd.conf.
 
-Since you're in VirtualHost make sure your DocumentRoot is the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
+Since you're already in VirtualHost, make sure to point your DocumentRoot at the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
 
-Make sure to restart the server so the changes will be available.
+Restart the server and make the changes available.
 
 ### Check your installation
 
-Nice, browse to [http://localhost/app_dev.php/](http://localhost/app_dev.php/) and make sure you see the Welcome screen and also check <a href="http://localhost/config.php" target="_new">http://localhost/config.php</a> to make sure you meet the requirements.
+Nice, browse to [http://localhost/app_dev.php/](http://localhost/app_dev.php/) and make sure you see the Welcome screen and check <a href="http://localhost/config.php" target="_new">http://localhost/config.php</a> that your server is well configured.
 
 
 ## Open up PagodaBox
