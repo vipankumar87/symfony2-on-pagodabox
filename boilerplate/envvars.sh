@@ -1,0 +1,6 @@
+#!/bin/bash
+export SYMFONY__DATABASE__HOST=value
+export SYMFONY__DATABASE__NAME=value
+export SYMFONY__DATABASE__PORT=value
+export SYMFONY__DATABASE__USER=value
+export SYMFONY__DATABASE__PASS=value
