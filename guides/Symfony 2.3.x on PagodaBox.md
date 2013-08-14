@@ -1,54 +1,65 @@
-Symfony 2.3.x on PagodaBox, a guide
+Symfony 2.3 Deployment Guide for PagodaBox
 ==========================
 
-### This document tested against
+Process tested against:
 
-* August 12, 2013: known to work with Symfony 2.3.3
+* Symfony 2.3.3, August 12, 2013
 
-## Preface
+## [Preface.md](Preface.md)
 
-Check [Preface.md](Preface.md) if something doesn't make sense.
+Check the preface if something doesn't make sense.
 
 ## Start locally
 
-PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> but I think providing source code is best left to Composer. Let's create a skeleton app locally, and then push it to PagodaBox (which is super simple).
+PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which I'd skip.<br/>Providing source code is Composer's job.<br/>We'll create a basic app and push it to PagodaBox.
 
-## Create a fresh Symfony project with Composer
+## composer create-project symfony/framework-standard-edition
 
 
-You can name your project anything, I chose `fresh`.<br/>
-Use your project name in the commands that follow.
+Name your project anything, my examples use `fresh`.<br/>
 
 ```
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . 2.3.3 --no-scripts
 ``` 
-This will download the Symfony core, install it's dependencies and skip the usual install scripts for now.
+We've downloaded the core and default dependencies, skipping the install scripts (for now).
 
-### Set permissions for `app/cache` and `app/logs`
+### Set `app/cache` and `app/logs` permissions
 
-There are a <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">few ways</a> to do this. I like this one-liner, which uses ACL (more flexible than standard unix permissions).
+Of the <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">three main ways</a> to do this I like this one-liner:
 
 ```
 $ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
 chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 ```
-If Apache isn't running you'll see an error like *chmod: Invalid entry format…* in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case it's `_www`).
+If Apache isn't running you'll see an error ***chmod: Invalid entry format…*** in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case `_www`).
 
 ### Initialize your Git repo
 
-Symfony comes with a good `.gitignore` so let's capture the initial state of the applicaiton code before we doing any work.
+Knowing Symfony comes with a good `.gitignore` let's capture the initial state of the applicaiton code before doing any work.
 
 ```
 $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
 
-Not only will git track the our development history, we'll use it to deploy our app on PagodaBox. Deploy just means make a certain version live. Using git is awesome for version based deployment, as we'll see.
+We'll also use git to deploy our app on PagodaBox which is awesome for version based deployment, as we'll see.
 
-### Ensure intl extension parity via composer.json
+### You might need to configure icu in composer.json
 
-http://symfony.com/doc/current/components/intl.html#installation
+Symfony2 always recommended using [ICU](http://site.icu-project.org/) (a popular, well support library) to convert date/time/number/currency for different areas of the world. Since ICU is a generic C library the best way to use it in PHP code was with the [Intl extension](http://www.php.net/manual/en/intro.intl.php), a wrapper for ICU.
 
-Currently  
+As of Symfony 2.3 ICU support is required. Since not every host comes with the Intl extension a shim ships with Symfony 2.3 that handles the presence or absence of the Intl extension gracefully.
+
+Currently PagodaBox supports Intl 1.1.0, which bundles ICU 4.2.1 — you will need to check your local environment to figure out what to do next.
+
+Check your local dev:
+
+```
+php -i | grep 
+```
+
+
+1. You have 
+
 
 ```
 "require": {
@@ -273,97 +284,3 @@ web1:
 ### Deploy your app 
 
 With your Boxfile configured we're ready to boot up Symfony on the production server.
-
-##The rest of this document are is an outline with fragments I'm currently working on
-
-### Install a database
-
-- Go to PagdoaDashboard
-- Click add Database, select MySQL and pick a name (or let one be auto-generated)
-	- I've noticed that creating a databse will often make the dashboard hang, just refresh it after a minute or so
-
-### Using MySQL Workbench (or another DBA terminal)
-- install <a href="http://www.mysql.com/products/workbench/" target="_new">MySQL Workbench</a> (you need to start a free acount)
-- install the pagoda cli `$ gem install pagoda`
-- from your app root `$ pagoda tunnel -c [dbname]`
-
-### Create quick_deploy branch
-
-create branch
-
-```
-$ git checkout -b quick_deploy
-```
-
-update .gitignore to allow
-
-```
-#/web/bundles/
-#/app/bootstrap.php.cache
-/app/cache/*
-#/app/config/parameters.yml
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
-/build/
-#/vendor/
-/bin/
-/composer.phar
-```
-
-### Make some demo content quick
-
-```
-$ php app/console generate:bundle --namespace=ixel/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
-```
-
-### paramters.yml
-
-After all the vendors are downloaded — you will get prompted to provide some values to generate a configuration file which resides at `app/config/parameters.yml`. Just hit enter on each prompt to use the default values except for 'secret' which you'll want to provide something unique. We'll revisit paramtes.yml later since we'll use Apache Environment Variables (EnvVar) to make maintaining differences between our local and PagodaBox setups easier (more on this later).
-
-Here's an overview of the prompts with the `defaults` you'll probably see:
-
-- database_driver: `pdo_mysql` PagodaBox uses MySQL by default (Mongo is still in beta)
-- database_host: `127.0.0.1` we'll configure this as an EnvVar later
-- database_port: `null` ditto EnvVar
-- database_host: `symfony` ditto EnvVar
-- database_user: `127.0.0.1` ditto EnvVar
-- database_password: `127.0.0.1 `ditto EnvVar
-- mailer_transport: `smtp` only needed if you intend to use Symfony's mail component
-- mailer_host: `127.0.0.1` ditto
-- mailer_host: `null` ditto
-- mailer_host: `null` ditto
-- locale: `en` This optional prefix refers to the default language of your site (ToDo: check if it's a convention or a specificaiton)
-- **secret:** ***FILL THIS IN!*** I like to hash a random phrase (in a different shell session) `$ md5 -s 'put a random phrase here'`
-
-### How I build my stack
-
-I've been meaning to try out Vagrant but personally I use MAMP Pro to manage Apache / MySQL / PHP locally — it just makes sense to me. I use Pear to manage php extensions, and Pear requires <a href="http://www.lullabot.com/blog/article/installing-php-pear-and-pecl-extensions-mamp-mac-os-x-107-lion" target="_new">some config to work with MAMP</a>. I install Git with Homebrew. Composer uses it's own cURL method and self-update command.
-
-**My development toolbox:** 
-
-- SublimeText
-- PhpStorm
-- SoureTree (to visualize git repos)
-- MySQL Workbench
-- Mou (to write this Markdown)
-
-### Parity
-
-It goes without saying you're going to want to maximize parity between your local development environment and your PagodaBox production environment. We'll look at PagodaBox in a minute, so maybe jump back Not just the core tools listed above, but also in the PHP extensions you use. This can be a slight pain at times (like my experience with <a href="http://stackoverflow.com/questions/16753105/problems-with-lib-icu-dependency-when-installing-symfony-2-3-x-via-composer" target="_new">intl</a>) but luckily Symfony 2.3 is going to be stable and supported till 2016 so once you figure it out once you're going to be set for years to come.
-
-Some extensions — like Xdebug — are actually best left off the production server but in general you should aim to ensure that each component of your local and producion stacks matches with the same major version and hopefully minor version (just as a rule of thumb).
-
-
-With the parameters configured the Symfony installer runs a few more commands and assuming there were no errors we're off to a good start!
-
-You can `$ ls -lAGh` for Unixy or `$ open .` for OSXy glimpse at all your fresh new source code.
-
-### global boxfile env vars aren't avilable during the build/deploy phase
-
-```
-global:
-  env:
-    SYMFONY__DATABASE__HOST: tunnel.pagodabox.com
-    SYMFONY__DATABASE__PORT: 3306
-```
