@@ -7,9 +7,9 @@ I started this repository to document a reproducibile, low friction workflow for
 
 ### Deployment Guides
 
-1. [Preface.md](guides/Preface.md)
-1. [Symfony 2.3.x on PagodaBox.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)
-1. [Production & Local Parity.md](guides/Production%20&%26Local%20Parity.md)
+- [Preface.md](guides/Preface.md)
+- [Symfony 2.3.x on PagodaBox.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)
+- [Production & Local Parity.md](guides/Production%20%26%20Local%20Parity.md)
 
 ### Boilerplate
   - [Boxfile](boilerplate/Boxfile) `&&` [About Boxfile.md](guides/About Boxfile.md)
