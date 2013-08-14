@@ -1,4 +1,5 @@
-## Deploying Symfony2 on PagodaBox
+Deploying Symfony2 on PagodaBox
+====
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
@@ -6,19 +7,19 @@ I started this repository to document a reproducibile, low friction workflow for
 
 ### Deployment Guides
 
-* [Preface.md](guides/Preface.md)
-* [Symfony 2.3.x on PagodaBox - Guide.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)<br/>`&&` [Symfony 2.3.x on PagodaBox - Cheatsheet.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)
-* [Production & Local Parity.md](guides/Production%20&%26Local%20Parity.md)
+1. [Preface.md](guides/Preface.md)
+1. [Symfony 2.3.x on PagodaBox.md](guides/Symfony%202.3.x%20on%20PagodaBox.md)
+1. [Production & Local Parity.md](guides/Production%20&%26Local%20Parity.md)
 
 ### Boilerplate
   - [Boxfile](boilerplate/Boxfile) `&&` [About Boxfile.md](guides/About Boxfile.md)
   - [envvars.sh](boilerplate/envvars.sh)
-  - [httpd.conf-fragment](boilerplate/httpd.conf-fragment)  
+  - [httpd.conf.fragment](boilerplate/httpd.conf.fragment)  
   
 ### Extras
   - [About Composer.md](About%20Composer.md)
 
-### Why Symfony2 and PagodaBox?
+## Why Symfony2 and PagodaBox?
 
 **Symfony2** is a php framework for building contempoary web apps. Symfony is with modularity in mind and encourages sharing and well written code. It's optimized for speed and scaling while staying flexible and expressive. Symfony2 and related projects form a great community of makers, working to solve interesting problems. Symfony comes preconfigured with nice defaults and no magic unicorns. It's loosely coupled architecture gives you flexiblity which means you have to figure out which way you want to work. I aim to layout a conventional and efficient path for bootstrapping your app.
 

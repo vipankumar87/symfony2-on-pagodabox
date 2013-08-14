@@ -1,4 +1,4 @@
-Symfony 2.3 Deployment Guide for PagodaBox
+Symfony 2.3.x on PagodaBox
 ==========================
 
 Process tested against:
@@ -11,9 +11,9 @@ Check the preface if something doesn't make sense.
 
 ## Start locally
 
-PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which I'd skip.<br/>Providing source code is Composer's job.<br/>We'll create a basic app and push it to PagodaBox.
+PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which I'd avoid. Providing source code is Composer's job. We'll create a basic app and push it to PagodaBox.
 
-## composer create-project symfony/framework-standard-edition
+### composer create-project
 
 
 Name your project anything, my examples use `fresh`.<br/>
