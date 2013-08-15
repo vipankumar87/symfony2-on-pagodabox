@@ -1,4 +1,4 @@
-Symfony 2.3.x on PagodaBox
+Configuring & Deploying Symfony 2.3.x for PagodaBox with a MySQL Database
 ==========================
 
 Process tested against:
@@ -11,67 +11,65 @@ Check the preface if something doesn't make sense.
 
 ## Start locally
 
-PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which I'd avoid. Providing source code is Composer's job. We'll create a basic app and push it to PagodaBox.
+PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which are a cool idea but providing source is Composer's job. I may adapt these steps into a Quickstart script but for now start locally.
 
 ### composer create-project
 
-
-Name your project anything, my examples use `fresh`.<br/>
+Name your project anything — I'm using `fresh` —  and install the newest stable:
 
 ```
-$ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . 2.3.3 --no-scripts
+$ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ``` 
-We've downloaded the core and default dependencies, skipping the install scripts (for now).
 
-### Set `app/cache` and `app/logs` permissions
-
-Of the <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">three main ways</a> to do this I like this one-liner:
+If you want a specific version, check the available stable:
 
 ```
-$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
-chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+$ composer show symfony/framework-standard-edition | grep "versions" | sed -e "s~, ~\\`echo -e '\n\r'`~g" | grep v[0-9]\.[0-9]\.[0-9]$ | sed -e s/v//
+
 ```
-If Apache isn't running you'll see an error ***chmod: Invalid entry format…*** in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case `_www`).
+then, say, specify `2.3.3` after the path `.`
+
+```
+…framework-standard-edition . 2.3.3 --no-interaction
+```
+
+With the Symfony core and default dependencies downloaded let's git some versioning done.
 
 ### Initialize your Git repo
 
-Knowing Symfony comes with a good `.gitignore` let's capture the initial state of the applicaiton code before doing any work.
+Knowing Symfony comes with a good `.gitignore` capture the initial state of the applicaiton code:
 
 ```
 $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
+Git plays an important role in deploying to PagodaBox, which we'll see.
 
-We'll also use git to deploy our app on PagodaBox which is awesome for version based deployment, as we'll see.
+### Specify the correct symfony/icu in composer.json
 
-### You might need to configure icu in composer.json
+Symfony2 uses the well supported [ICU library](http://site.icu-project.org/) to convert date/time/number/currency for internationalization and localization. Since ICU is a generic C library PHP ships with the [Intl extension](http://www.php.net/manual/en/intro.intl.php) which adapts ICU for use in PHP. Some shared hosts don't install Intl so Symfony 2.3 ships with [symfony/icu](https://packagist.org/packages/symfony/icu) to handle the presence or absence of the Intl gracefully — [you just need to install the right version](http://symfony.com/doc/current/components/intl.html).
 
-Symfony2 always recommended using [ICU](http://site.icu-project.org/) (a popular, well support library) to convert date/time/number/currency for different areas of the world. Since ICU is a generic C library the best way to use it in PHP code was with the [Intl extension](http://www.php.net/manual/en/intro.intl.php), a wrapper for ICU.
-
-As of Symfony 2.3 ICU support is required. Since not every host comes with the Intl extension a shim ships with Symfony 2.3 that handles the presence or absence of the Intl extension gracefully.
-
-Currently PagodaBox supports Intl 1.1.0, which bundles ICU 4.2.1 — you will need to check your local environment to figure out what to do next.
-
-Check your local dev:
+As of this writing, PagodaBox supports Intl 1.1.0, which bundles ICU 4.2.1.<br/>Now check the local environment.
 
 ```
-php -i | grep 
+php -i | grep "ICU v"
+```
+(in case your CLI uses a different php.ini double check `phpinfo()` in the browser)
+
+If the ICU version is higher than 4.0 do:
+
+```
+$ composer require symfony/icu 1.1.*
+```
+If ICU doesn't exist or is lower than 4.0 do:
+
+```
+$ composer require symfony/icu 1.0.*
 ```
 
-
-1. You have 
-
-
-```
-"require": {
-	"php": ">=5.3.3",
-	"symfony/icu": "1.1.*",
-	"symfony/symfony": "2.3.*",
-    …
-```
 
 ### Optionally add symlink option in composer.json
 
-I like to install assets with symlinks, add this to "extra" in `composer.json` (don't forget your json comma!):
+Highly recommend to install assets with symlinks. Add this to "extra" in `composer.json` (don't forget your json comma!):
 
 ```
 "extra": {
@@ -81,14 +79,14 @@ I like to install assets with symlinks, add this to "extra" in `composer.json` (
 ```
 Symlinks save disk space and command line work. Each time you add a Bundle you'll want to install it's assets. With "symlink" you install once, each time you add a Bundle (or Bundles). You can also use "relative" for relative symlinks, both work fine when deploying to PagodaBox.
 
-### Updating paramters.yml.dist
+### Update paramters.yml.dist
 
 By default `paramters.yml` is kept out of your repo so your code stays portable. Defaults are still nice, so Symfony 2.3 <a href="http://symfony.com/blog/new-in-symfony-2-3-interactive-management-of-the-parameters-yml-file" target="_new">includes an install script</a> which allows you to customize the default values in a template called `paramters.yml.dist`. Let's take full advantage of this behavior.
 
 ```
 $ $EDITOR app/config/parameters.yml.dist
 ```
-replace contents with this:
+replace contents with :
 
 ```
 parameters:
@@ -111,14 +109,20 @@ parameters:
 ```
 The values marked with precentages `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
 
-### Create envvars.sh shell script
+## Local Environemnt Variables
 
-Add `envvars.sh` to .gitignore and start editing
+Environment Vars allow each developer and runtime envirnment to implemenet different credentials for databases (etc). Generally the CLI and Apache need independent methods of setting these variables.
+
+### For the shell: envars.sh
+
+See: [boilerplate/envars.sh](https://github.com/mfdj/symfony2-on-pagodabox/blob/master/boilerplate/envars.sh)<br/>
+
+Add `envars.sh` to .gitignore and start editing
 
 ```
-$ sed -i -e '$a\' .gitignore && echo 'envvars.sh' >> .gitignore && rm .gitignore-e && $EDITOR envvars.sh
+$ sed -i -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore-e && $EDITOR envars.sh
 ```
-Here's a template for `envvars.sh`:
+Template for `envvars.sh`:
 
 ```
 #!/bin/bash
@@ -128,34 +132,16 @@ export SYMFONY__DATABASE__PORT=value
 export SYMFONY__DATABASE__USER=value
 export SYMFONY__DATABASE__PASS=value
 ```
-…replace each `value` with appropriate values for your local dev environment — to be clear these are the values Symfony/Doctrine will use to access your database. Make sure there are no spaces, so host would look like `export SYMFONY__DATABASE__HOST=127.0.0.1`.
+…replace each `value` with appropriate values for your local dev environment. Make sure there are no spaces, example: `export SYMFONY__DATABASE__HOST=127.0.0.1`.
 
-Close, save, and run the script:
+With values set when you run the script:
 
 ```
 $ . ./envvars.sh
 ```
-Now these variables are available in the shell, which will be crucial for many `app/console` commands. You'll want to run envvars.sh once per shell session when working on this project.
+the shell will have access which is crucial for many `app/console` commands. Run envvars.sh each shell session you work on the project. Ideally I'm going to figure out how to run this automatically.
 
-
-### Now run the install scripts
-With variables exported we can safely run the install scripts. We'll skip the interactive prompts so `parameters.yml` will be created entirely with the defaults in `paramters.yml.dist`.
-
-```
-$ SYMFONY__OTHER__SECRET=blank && composer install --no-interaction
-```
-**Notice** I prepended a shim which we need just once; see next.
-
-### Update secret in paramters.yml
-
-With `app/config/paramters.yml` generated we'll customize `secret:` to something secret. Use this one-liner (just provide your own phrase):
-
-```
-$ SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
-```
-or change the secret manually: `$ $EDITOR app/config/parameters.yml`.
-
-### Add the environment vars to local Apache
+### For Apache: SetEnv in httpd.conf
 
 Since the command line and web server are different processes we'll make the same values available to Apache with the `SetEnv` directive.
 
@@ -171,6 +157,37 @@ Update each value to match `envvars.sh` (notice no equals sign here) and add the
 Since you're already in VirtualHost, make sure to point your DocumentRoot at the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
 
 Restart the server and make the changes available.
+
+
+### Now run the install scripts
+With variables exported we can safely run the install scripts. We'll skip the interactive prompts so `parameters.yml` will be created entirely with the defaults in `paramters.yml.dist`.
+
+```
+$ SYMFONY__OTHER__SECRET=blank && composer install --no-interaction
+```
+**Notice** I prepended a shim which we need just once; see next.
+
+## Final local config steps fo
+
+### Update secret in paramters.yml
+
+With `app/config/paramters.yml` generated we'll customize `secret:` to something secret. Use this one-liner (just provide your own phrase):
+
+```
+$ SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
+```
+or change the secret manually: `$ $EDITOR app/config/parameters.yml`.
+
+
+### Set `app/cache` and `app/logs` permissions
+
+Of the <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">three main ways</a> to do this I like this one-liner:
+
+```
+$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
+chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+```
+If Apache isn't running you'll see an error ***chmod: Invalid entry format…*** in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case `_www`).
 
 ### Check your installation
 
@@ -240,7 +257,7 @@ By keeping these values out of your repository you get cleaner deployments and c
 
 PagodaBox uses a file named `Boxfile` that sits at the root of your app and configures your production environment. It's YAML formatted so it's easy to read and edit. Since it's part of your repo it's version controlled, which is awesome becuase it keeps the state of your code and server in sync.
 
-Below is a solid boilerplate [Boxfile](Boxfile) ready to handle Symfony 2.3.x — see the <a href="About%20Boxfile.md" target="_new">About Boxfile.md</a> guide for more detail.
+Below is the abridged [Boxfile](Boxfile) ready to handle Symfony 2.3.x — see the [About Boxfile.md](About Boxfile.md) guide for more detail.
 
 ```
 web1:
@@ -248,11 +265,6 @@ web1:
   document_root   : web
   default_gateway : app.php
   index_list      : [app.php]
-
-  apache_access_log : false
-  apache_error_log  : true
-  php_error_log     : true
-  php_fpm_log       : true
 
   php_version: 5.4.14
   php_date_timezone: "America/Los_Angeles"
@@ -279,7 +291,6 @@ web1:
   after_deploy:
     - "php app/console cache:clear --env=prod --no-debug"
     - "php app/console router:debug --env=prod"
-
 ```
 ### Deploy your app 
 
