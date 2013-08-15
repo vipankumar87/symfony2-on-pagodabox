@@ -1,6 +1,6 @@
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Boxfile Boilerplate for Symfony 2.3.x
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  Boilerplate Boxfile for Symfony 2.3.x
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 web1: # identifier that corresponds with component type and id in your apps dashboard
 
@@ -54,7 +54,8 @@ web1: # identifier that corresponds with component type and id in your apps dash
   after_build:
     - "curl -sS https://getcomposer.org/installer | php"
     - "php composer.phar install --prefer-source --optimize-autoloader"
-      # prefer source smooths out API limits https://github.com/composer/composer/issues/1861  
+      # ▴ prefer source smooths out API limits https://github.com/composer/composer/issues/1861  
+      # ▴ optimize autoloader generally recommended for production
 
   after_deploy:
     - "php app/console cache:clear --env=prod --no-debug"  # do this like every deploy

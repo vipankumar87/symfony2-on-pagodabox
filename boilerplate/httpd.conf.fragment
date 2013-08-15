@@ -1,1 +1,14 @@
-…
+<VirtualHost *:80>
+
+	ServerName fresh
+	
+	DocumentRoot "/the/path/to/fresh/web"
+
+	SetEnv  SYMFONY__DATABASE__NAME value
+	SetEnv  SYMFONY__DATABASE__HOST value
+	SetEnv  SYMFONY__DATABASE__PORT value
+	SetEnv  SYMFONY__DATABASE__USER value
+	SetEnv  SYMFONY__DATABASE__PASS value
+	SetEnv  SYMFONY__GENERAL__SECRET value
+
+</VirtualHost>

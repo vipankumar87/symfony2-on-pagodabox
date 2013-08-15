@@ -1,5 +1,12 @@
-parameters:
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  Boilerplate parameters for Symfony 2.3.x
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+parameters:
+    
+    # All of these key/values are required by Symfony standard
+
+    # Database config — PagodaBox uses MySQL
     database_driver   : pdo_mysql
     database_host     : %database.host%
     database_port     : %database.port%
@@ -7,11 +14,17 @@ parameters:
     database_user     : %database.user%
     database_password : %database.pass%
 
-    # symfony's install script will fail without these
+    # Mail - customize if you use it
     mailer_transport  : smtp
     mailer_host       : 127.0.0.1
     mailer_user       : null
     mailer_password   : null
 
+    # http://symfony.com/doc/current/components/intl.html#locales
     locale : en
-    secret : %other.secret%
+
+    # http://symfony.com/doc/current/reference/configuration/framework.html#secret
+    secret : %general.secret%
+
+    # You can define your own parameters:
+    # http://symfony.com/doc/current/components/dependency_injection/parameters.html

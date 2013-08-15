@@ -9,7 +9,7 @@ Process tested against:
 
 Check the preface if something doesn't make sense.
 
-## Start locally
+## Start locally with Composer
 
 PagodaBox offers <a href="https://dashboard.pagodabox.com/apps/new?search=symfony" target="_new">Quickstarts</a> which are a cool idea but providing source is Composer's job. I may adapt these steps into a Quickstart script but for now start locally.
 
@@ -33,7 +33,9 @@ then, say, specify `2.3.3` after the path `.`
 …framework-standard-edition . 2.3.3 --no-interaction
 ```
 
-With the Symfony core and default dependencies downloaded let's git some versioning done.
+No interaction mode skips any prompts in Symfony's install scripts, specifically for configuring parameters.yml — this is addressed later.
+
+With the Symfony core and standard dependencies downloaded let's git some versioning done.
 
 ### Initialize your Git repo
 
@@ -44,32 +46,38 @@ $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
 Git plays an important role in deploying to PagodaBox, which we'll see.
 
-### Specify the correct symfony/icu in composer.json
+### Ensure symfony/icu parity
 
 Symfony2 uses the well supported [ICU library](http://site.icu-project.org/) to convert date/time/number/currency for internationalization and localization. Since ICU is a generic C library PHP ships with the [Intl extension](http://www.php.net/manual/en/intro.intl.php) which adapts ICU for use in PHP. Some shared hosts don't install Intl so Symfony 2.3 ships with [symfony/icu](https://packagist.org/packages/symfony/icu) to handle the presence or absence of the Intl gracefully — [you just need to install the right version](http://symfony.com/doc/current/components/intl.html).
 
-As of this writing, PagodaBox supports Intl 1.1.0, which bundles ICU 4.2.1.<br/>Now check the local environment.
+As of this writing, PagodaBox supports Intl 1.1.0, which bundles ICU 4.2.1.<br/>Now check the local environment to ensure version parity between environments.
 
 ```
 php -i | grep "ICU v"
 ```
 (in case your CLI uses a different php.ini double check `phpinfo()` in the browser)
 
-If the ICU version is higher than 4.0 do:
+If the ICU version is higher than 4.0 require 1.1.x:
 
 ```
 $ composer require symfony/icu 1.1.*
 ```
-If ICU doesn't exist or is lower than 4.0 do:
+If ICU doesn't exist or is lower than 4.0 require 1.0.x:<br/>
+*you're limited to the `en` locale with symfony/icu 1.0.0*
 
 ```
 $ composer require symfony/icu 1.0.*
 ```
 
 
-### Optionally add symlink option in composer.json
+### Optionally use asset symlinks
 
-Highly recommend to install assets with symlinks. Add this to "extra" in `composer.json` (don't forget your json comma!):
+Highly recommend to install assets with symlinks.<br/>
+Add this to "extra" in `composer.json`
+
+```
+$ $EDITOR composer.json
+```
 
 ```
 "extra": {
@@ -77,16 +85,17 @@ Highly recommend to install assets with symlinks. Add this to "extra" in `compos
 	"symfony-assets-install": "symlink"
 }
 ```
-Symlinks save disk space and command line work. Each time you add a Bundle you'll want to install it's assets. With "symlink" you install once, each time you add a Bundle (or Bundles). You can also use "relative" for relative symlinks, both work fine when deploying to PagodaBox.
+Symlinks save disk space and visits to the command line. Each time you add a Bundle you'll want to install it's assets. With "symlink" you install once, each time you add a Bundle (or Bundles). You can also use "relative" for relative symlinks, both work fine when deploying to PagodaBox.
 
 ### Update paramters.yml.dist
 
-By default `paramters.yml` is kept out of your repo so your code stays portable. Defaults are still nice, so Symfony 2.3 <a href="http://symfony.com/blog/new-in-symfony-2-3-interactive-management-of-the-parameters-yml-file" target="_new">includes an install script</a> which allows you to customize the default values in a template called `paramters.yml.dist`. Let's take full advantage of this behavior.
+Conventionally `paramters.yml` is kept out of your repo because parameters usually vary between machines. Defaults are nice, so Symfony 2.3 <a href="http://symfony.com/blog/new-in-symfony-2-3-interactive-management-of-the-parameters-yml-file" target="_new">includes an install script</a> which allows you to customize the default values in a template called `paramters.yml.dist`. Let's take full advantage of this behavior.
 
 ```
 $ $EDITOR app/config/parameters.yml.dist
 ```
-replace contents with :
+[ see: [boilerplate/parameters.yml.dist](http://) ] <br/> 
+replace contents with:
 
 ```
 parameters:
@@ -104,25 +113,27 @@ parameters:
     mailer_password   : null
     
     locale : en
-    secret : %other.secret%    
+    secret : %other.secret%
 
 ```
-The values marked with precentages `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
 
-## Local Environemnt Variables
+To recap, when running composer install/update `paramters.yml.dist` is used to provide default values for `paramters.yml` — if parameters.yml already has a value, the default is ignored. Since we already ran the install scripts (composer create-project) our paramters.yml
 
-Environment Vars allow each developer and runtime envirnment to implemenet different credentials for databases (etc). Generally the CLI and Apache need independent methods of setting these variables.
+The values marked with percentage signs `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
 
-### For the shell: envars.sh
+## Local Environment Variables
 
-See: [boilerplate/envars.sh](https://github.com/mfdj/symfony2-on-pagodabox/blob/master/boilerplate/envars.sh)<br/>
+With paramters.yml depending on environments vars each developer and runtime needs to implement different credentials for databases (etc). Generally the CLI and Apache need independent methods of setting these variables.
 
-Add `envars.sh` to .gitignore and start editing
+### For your shell: envars.sh
+
+[ see: [boilerplate/envars.sh](https://github.com/mfdj/symfony2-on-pagodabox/blob/master/boilerplate/envars.sh) ]<br/>
+Add `envars.sh` to .gitignore and start editing:
 
 ```
-$ sed -i -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore-e && $EDITOR envars.sh
+$ sed -i.orig -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore.orig && $EDITOR envars.sh
 ```
-Template for `envvars.sh`:
+Template for `envars.sh`:
 
 ```
 #!/bin/bash
@@ -131,15 +142,18 @@ export SYMFONY__DATABASE__NAME=value
 export SYMFONY__DATABASE__PORT=value
 export SYMFONY__DATABASE__USER=value
 export SYMFONY__DATABASE__PASS=value
+export SYMFONY__GENERAL__SECRET=value
 ```
 …replace each `value` with appropriate values for your local dev environment. Make sure there are no spaces, example: `export SYMFONY__DATABASE__HOST=127.0.0.1`.
 
-With values set when you run the script:
+With values set run the script:
 
 ```
-$ . ./envvars.sh
+$ . ./envars.sh
 ```
-the shell will have access which is crucial for many `app/console` commands. Run envvars.sh each shell session you work on the project. Ideally I'm going to figure out how to run this automatically.
+… now the shell has access to these variables, crucial for running `app/console` commands.
+
+Run envars.sh each shell session you work on the project. Ideally I'll figure out how to do this automatically, whenever you use app/console.
 
 ### For Apache: SetEnv in httpd.conf
 
@@ -151,33 +165,38 @@ SetEnv  SYMFONY__DATABASE__HOST value
 SetEnv  SYMFONY__DATABASE__PORT value
 SetEnv  SYMFONY__DATABASE__USER value
 SetEnv  SYMFONY__DATABASE__PASS value
+SetEnv  SYMFONY__GENERAL__SECRET value
 ```
-Update each value to match `envvars.sh` (notice no equals sign here) and add these directives to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHost</a> in httpd.conf.
+Update each value to match `envars.sh` (notice no equals sign here) and add these directives to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHost</a> in httpd.conf.
 
-Since you're already in VirtualHost, make sure to point your DocumentRoot at the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
+Since you're already in VirtualHost, double check your DocumentRoot points at the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
 
-Restart the server and make the changes available.
+Restart the server to make the changes available.
 
+### Help setting a secret
 
-### Now run the install scripts
-With variables exported we can safely run the install scripts. We'll skip the interactive prompts so `parameters.yml` will be created entirely with the defaults in `paramters.yml.dist`.
+To aid in generating a secret I like to hash a phrase:
 
 ```
-$ SYMFONY__OTHER__SECRET=blank && composer install --no-interaction
+$ md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/
 ```
-**Notice** I prepended a shim which we need just once; see next.
-
-## Final local config steps fo
-
-### Update secret in paramters.yml
-
-With `app/config/paramters.yml` generated we'll customize `secret:` to something secret. Use this one-liner (just provide your own phrase):
+To simplify local configuration you can omit the `SYMFONY__OTHER__SECRET` environment variable and use this one liner to add a secret to `parameters.yml`.
 
 ```
 $ SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
 ```
-or change the secret manually: `$ $EDITOR app/config/parameters.yml`.
 
+## Finishing touches on local 
+
+With variables exported we'll re-run the install scripts and finish local configuration.
+
+### Remove parameters.yml and re-run install
+
+We'll skip the interactive prompts so `parameters.yml` will be created entirely with the defaults in `paramters.yml.dist`.
+
+```
+$ rm app/config/parameters.yml; composer install --no-interaction
+```
 
 ### Set `app/cache` and `app/logs` permissions
 
@@ -196,7 +215,7 @@ Nice, browse to [http://localhost/app_dev.php/](http://localhost/app_dev.php/) a
 
 ## Open up PagodaBox
 
-If you haven't already, sign up for PagodaBox and crack open your dashboard [https://dashboard.pagodabox.com/](https://dashboard.pagodabox.com/) — yum!
+If you haven't already, sign up for PagodaBox, setup an SSH key, and crack open your dashboard [https://dashboard.pagodabox.com/](https://dashboard.pagodabox.com/) — yum!
 
 ### Create your first application
 * click New Application
@@ -218,13 +237,13 @@ $ git push -u pagoda --all
 ```
 If you setup your remote correctly than after pushing you'll see a stream of output on your screen like "Building Infastructure". You're watching your app build and deploy! Once it's done you should see "Decommisioning Previous Infrastructure" and your prompt will return. If your build ends in error, hold tight, we're still configuring things.
 
-### Git push means deploy
+### Now git push also deploys
 
-Since we used `git push -u pagoda` above all future pushes will use pagoda by default. When you `git push` your master branch to pagoda it will build and deploy your app with the code you just pushed — pretty powerful!
+By using `git push -u pagoda` pagoda became the default remote for that branch so simply doing you `$ git push` (from master) will push changes to pagoda, rebuild and redeploy your app — pretty powerful!
 
 There are many ways to deploy your app but for our purposes `git push` will be synomous with deploying. What's cool is that if your build fails your app won't go down. PagodaBox keeps your pervious build running right unitl your new build completes, so there should be basically no downtime.
 
-### Create a database and grab the credentials
+### Create a database, grab the credentials, set Environment Vars
 
 Go back to your PagodaBox dashboard and select your app
 
@@ -236,10 +255,10 @@ Go back to your PagodaBox dashboard and select your app
 Once your new database is created it will show in the dashboard (sometimes the UI hangs, just manually refresh if nothing changes after a minute).
 
 - click your database (manage)
-- below, click *Show Credentials*
+- below, click Show Credentials
 - copy the database name, path, user, pass
 
-With values in hand look above and click "Environment Vars" and "Add Another" for each of the following keys, applying the values you just copied:
+With values in hand look above and click "Environment Vars" and "Add Another" for each of the following keys, applying the values for your database:
 
 - `SYMFONY__DATABASE__NAME`
 - `SYMFONY__DATABASE__HOST` (*path*, left of the colon)
@@ -247,9 +266,9 @@ With values in hand look above and click "Environment Vars" and "Add Another" fo
 - `SYMFONY__DATABASE__USER`
 - `SYMFONY__DATABASE__PASS`
 
-Now, add the last key with a value of your choosing:
+Now, add the last var:
 
-- `SYMFONY__OTHER__SECRET`<br/>try this one-liner to create a value `$ md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` 
+- `SYMFONY__GENERAL__SECRET`<br/>try this one-liner to create a value `$ md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` 
 
 By keeping these values out of your repository you get cleaner deployments and centralized credentials.
 
@@ -257,7 +276,11 @@ By keeping these values out of your repository you get cleaner deployments and c
 
 PagodaBox uses a file named `Boxfile` that sits at the root of your app and configures your production environment. It's YAML formatted so it's easy to read and edit. Since it's part of your repo it's version controlled, which is awesome becuase it keeps the state of your code and server in sync.
 
-Below is the abridged [Boxfile](Boxfile) ready to handle Symfony 2.3.x — see the [About Boxfile.md](About Boxfile.md) guide for more detail.
+[ see: [boilerplate/Boxfile](boilerplate/Boxfile) `&&` [About Boxfile.md](About Boxfile.md) ]
+
+```
+$ $EDITOR Boxfile
+```
 
 ```
 web1:
@@ -295,3 +318,7 @@ web1:
 ### Deploy your app 
 
 With your Boxfile configured we're ready to boot up Symfony on the production server.
+
+```
+$ git push
+```
