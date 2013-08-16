@@ -25,15 +25,14 @@ If you want a specific version, check the available stable:
 
 ```
 $ composer show symfony/framework-standard-edition | grep "versions" | sed -e "s~, ~\\`echo -e '\n\r'`~g" | grep v[0-9]\.[0-9]\.[0-9]$ | sed -e s/v//
+```
+then specify, say, `2.3.1` after the path `.`
 
 ```
-then, say, specify `2.3.3` after the path `.`
-
-```
-…framework-standard-edition . 2.3.3 --no-interaction
+…framework-standard-edition . 2.3.1 --no-interaction
 ```
 
-No interaction mode skips any prompts in Symfony's install scripts, specifically for configuring parameters.yml — this is addressed later.
+No interaction mode skips any prompts in Symfony's install scripts — specifically we're skipping cutomizing parameters.yml, which is addressed later.
 
 With the Symfony core and standard dependencies downloaded let's git some versioning done.
 
@@ -117,13 +116,13 @@ parameters:
 
 ```
 
-To recap, when running composer install/update `paramters.yml.dist` is used to provide default values for `paramters.yml` — if parameters.yml already has a value, the default is ignored. Since we already ran the install scripts (composer create-project) our paramters.yml
+To recap, when running composer install/update `paramters.yml.dist` is used to provide default values for `paramters.yml` — if parameters.yml already has a key/value the script will not overwrite it.
 
 The values marked with percentage signs `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
 
 ## Local Environment Variables
 
-With paramters.yml depending on environments vars each developer and runtime needs to implement different credentials for databases (etc). Generally the CLI and Apache need independent methods of setting these variables.
+Now paramters.yml depends on environments vars, which need to create. Generally the CLI and Apache need independent methods of setting these variables.
 
 ### For your shell: envars.sh
 
@@ -153,7 +152,7 @@ $ . ./envars.sh
 ```
 … now the shell has access to these variables, crucial for running `app/console` commands.
 
-Run envars.sh each shell session you work on the project. Ideally I'll figure out how to do this automatically, whenever you use app/console.
+Run envars.sh for each shell session you work on the project. Ideally I'll figure out how to do this automatically whenever app/console is run.
 
 ### For Apache: SetEnv in httpd.conf
 
@@ -167,7 +166,7 @@ SetEnv  SYMFONY__DATABASE__USER value
 SetEnv  SYMFONY__DATABASE__PASS value
 SetEnv  SYMFONY__GENERAL__SECRET value
 ```
-Update each value to match `envars.sh` (notice no equals sign here) and add these directives to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHost</a> in httpd.conf.
+Update each value to match `envars.sh` (notice no equals sign here) and add these directives to your <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">VirtualHost</a> in httpd.conf (might work in .htaccess too?)
 
 Since you're already in VirtualHost, double check your DocumentRoot points at the `web` folder of your project `DocumentRoot '/the/path/to/fresh/web'`.
 
@@ -180,15 +179,15 @@ To aid in generating a secret I like to hash a phrase:
 ```
 $ md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/
 ```
-To simplify local configuration you can omit the `SYMFONY__OTHER__SECRET` environment variable and use this one liner to add a secret to `parameters.yml`.
+To simplify local configuration you can *optionally* omit the `SYMFONY__OTHER__SECRET` environment var and use this one liner to hardcode a secret in `parameters.yml`.
 
 ```
 $ SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
 ```
 
-## Finishing touches on local 
+## Finishing touches, local 
 
-With variables exported we'll re-run the install scripts and finish local configuration.
+With variables exported we'll re-run Symfony's install scripts and finish local configuration.
 
 ### Remove parameters.yml and re-run install
 
@@ -215,7 +214,7 @@ Nice, browse to [http://localhost/app_dev.php/](http://localhost/app_dev.php/) a
 
 ## Open up PagodaBox
 
-If you haven't already, sign up for PagodaBox, setup an SSH key, and crack open your dashboard [https://dashboard.pagodabox.com/](https://dashboard.pagodabox.com/) — yum!
+If you haven't already, sign up for PagodaBox, setup your [git SSH key](http://help.pagodabox.com/customer/portal/articles/236852-git-ssh-troubleshooting), (bonus: install [the pagoda client](http://help.pagodabox.com/customer/portal/articles/175474-the-pagoda-terminal-client)), crack open your dashboard [https://dashboard.pagodabox.com/](https://dashboard.pagodabox.com/)… yum!
 
 ### Create your first application
 * click New Application
@@ -223,23 +222,23 @@ If you haven't already, sign up for PagodaBox, setup an SSH key, and crack open 
 * name your app
 * select Git for deployment mode
 
-When naming your application you need to pick a name that is globally unique to the PagodaBox. The name is not terribly important, just pick something simple and memorable.
+When naming you need to pick something globally unique to PagodaBox: just go simple and memorable, it's mainly for your PagodaBox test domain.
 
-After you select Git as your deployment method you'll see some instrucitons that show you how to get some files into your app. We'll get to that, but first: <a href="http://help.pagodabox.com/customer/portal/articles/175475" target="_new">Boxfile</a>.
+After you select Git as your deployment method you'll see instrucitons showing how to get some files into your app.
 
 ### Add pagoda remote and then deploy
 
-With our app started in PagodaBox bounce back to your local project and run the following commands, changing `myapp.git` to `your-apps-name-on-PagodaBox.git`
+With our app started in PB bounce back to local and run the following commands changing `myapp.git` to `your-apps-name-on-PagodaBox.git`/
 
 ```
 $ git remote add pagoda git@git.pagodabox.com:myapp.git
 $ git push -u pagoda --all
 ```
-If you setup your remote correctly than after pushing you'll see a stream of output on your screen like "Building Infastructure". You're watching your app build and deploy! Once it's done you should see "Decommisioning Previous Infrastructure" and your prompt will return. If your build ends in error, hold tight, we're still configuring things.
+If you setup your remote correctly than after pushing you'll see a stream of output on your screen like "Building Infastructure". You're watching your app build and deploy! Once it's done you should see "Decommisioning Previous Infrastructure" and your prompt will return. If your build ends in error, maybe hold tight, we're still configuring things.
 
 ### Now git push also deploys
 
-By using `git push -u pagoda` pagoda became the default remote for that branch so simply doing you `$ git push` (from master) will push changes to pagoda, rebuild and redeploy your app — pretty powerful!
+By using `git push -u pagoda` pagoda became the default remote for the current branch (currently master) and after `$ git push` (in the master branch) will push new commits to pagoda, and rebuild and redeploy your app — pretty powerful!
 
 There are many ways to deploy your app but for our purposes `git push` will be synomous with deploying. What's cool is that if your build fails your app won't go down. PagodaBox keeps your pervious build running right unitl your new build completes, so there should be basically no downtime.
 
@@ -321,4 +320,43 @@ With your Boxfile configured we're ready to boot up Symfony on the production se
 
 ```
 $ git push
+```
+
+## Test Your Database
+
+Back local, let's put some fake data in the database
+
+### DoctrineFixtures
+
+
+Get fixtures (fix composer.json stability)
+
+```
+$ $EDITOR composer.json 
+```
+```
+…
+   "minimum-stability": "dev",
+…
+```
+
+```
+$ composer require "doctrine/doctrine-fixtures-bundle" master-dev
+```
+
+Fresh Database
+
+```
+$ php app/console doctrine:database:drop --force; php app/console doctrine:database:create
+```
+
+Make PTBundle
+
+```
+$ php app/console generate:bundle --namespace=PagodaTest/Bundle --bundle-name=PTBundle --no-interaction --structure --dir=src --format=annotation
+```
+Make an entity
+
+```
+$ php app/console doctrine:generate:entity --entity=PTBundle:Post --fields="title:string(255) body:text"
 ```
