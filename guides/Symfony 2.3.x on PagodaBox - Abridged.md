@@ -18,7 +18,8 @@ Otherwise, just keep in mind that I use:
 
 1. In PagodaBox, create a new application
 
-1. Start locally, replace **fresh** with your project folder:<br/>```
+1. Start locally, replace **fresh** with your project folder:
+```
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ``` 
 
