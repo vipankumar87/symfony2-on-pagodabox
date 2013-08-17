@@ -28,13 +28,13 @@ $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edi
 $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
 
-1. Ensure symfony/icu parity: ```php -i | grep "ICU v"``` If ICU version is:
+1. Ensure symfony/icu parity: ```$ php -i | grep "ICU v"``` If ICU version is:
 	- **higher than 4.0**: `$ composer require symfony/icu 1.1.*`
 	- **lower than 4.0** or non-existent: `$ composer require symfony/icu 1.0.*`
 
 1. Use asset symlinks
-	a. ```$ $EDITOR composer.json```
-	b. ``` "extra": {
+	- ```$ $EDITOR composer.json```
+	- ``` "extra": {
     …,
     "symfony-assets-install": "symlink"
 } ```
