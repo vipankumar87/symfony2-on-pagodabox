@@ -50,8 +50,14 @@ chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app
 $ sf generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
 ```
 
-1. Add *pagoda* remote, replace **fresh.git**: `$ git remote add pagoda git@git.pagodabox.com:fresh.git`
+1. Add *pagoda* remote, replace **fresh.git**: 
+```
+$ git remote add pagoda git@git.pagodabox.com:fresh.git
+```
 
 1. Add *Boxfile*, see [boilerplate/Boxfile](boilerplate/Boxfile)
 
-1. Commit work `$ git add . && git commit -m 'Demo content installed, Boxfile added'`
+1. Commit work 
+```
+$ git add . && git commit -m 'Demo content installed, Boxfile added'
+```
