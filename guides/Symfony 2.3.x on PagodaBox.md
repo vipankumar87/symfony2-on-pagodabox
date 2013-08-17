@@ -1,5 +1,7 @@
-Configuring & Deploying Symfony 2.3.x for PagodaBox with a MySQL Database
+Configuring & Deploying Symfony2.3.x for PagodaBox with a MySQL Database
 ==========================
+
+### The extended version of [27 Steps to Bootstrap](Abridged.md)
 
 Tested against:
 
@@ -312,7 +314,6 @@ $ rm app/config/parameters.yml; composer install --no-interaction
 To recap, when running composer install/update `parameters.yml.dist` provides default values used to generate `parameters.yml` — if parameters.yml already has a key/value set that key is skipped by the install script.
 
 The values marked with percentage signs `%` are <a href="http://symfony.com/doc/current/cookbook/configuration/external_parameters.html" target="_new">environment variables</a> which will be explained in detail next.
-
 
 ### In PagodaBox create a database, grab the credentials, set Environment Vars
 
