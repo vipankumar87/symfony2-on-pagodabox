@@ -8,9 +8,9 @@ parameters:
 
     # Database config — PagodaBox uses MySQL
     database_driver   : pdo_mysql
+    database_name     : %database.name%    
     database_host     : %database.host%
     database_port     : %database.port%
-    database_name     : %database.name%
     database_user     : %database.user%
     database_password : %database.pass%
 

@@ -4,11 +4,11 @@
 	
 	DocumentRoot "/the/path/to/fresh/web"
 
-	SetEnv  SYMFONY__DATABASE__NAME value
-	SetEnv  SYMFONY__DATABASE__HOST value
-	SetEnv  SYMFONY__DATABASE__PORT value
-	SetEnv  SYMFONY__DATABASE__USER value
-	SetEnv  SYMFONY__DATABASE__PASS value
-	SetEnv  SYMFONY__GENERAL__SECRET value
+	SetEnv  SYMFONY__DATABASE__NAME ~
+	SetEnv  SYMFONY__DATABASE__HOST localhost
+	SetEnv  SYMFONY__DATABASE__PORT 3306
+	SetEnv  SYMFONY__DATABASE__USER ~
+	SetEnv  SYMFONY__DATABASE__PASS ~
+	SetEnv  SYMFONY__GENERAL__SECRET YourSecret
 
 </VirtualHost>
