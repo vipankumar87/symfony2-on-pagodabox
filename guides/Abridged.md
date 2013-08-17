@@ -55,11 +55,10 @@ $ sf generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=HelloBundl
 $ git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
 
-1. Add *Boxfile*
-	- see: [boilerplate/Boxfile](boilerplate/Boxfile)
-	- ```$ $EDITOR Boxfile```
+1. Add a Boxfile: ```$ $EDITOR Boxfile```, see: [boilerplate/Boxfile](boilerplate/Boxfile)
 
 1. Commit work: 
 ```
 $ git add . && git commit -m 'Demo content installed, Boxfile added'
 ```
+1. 
