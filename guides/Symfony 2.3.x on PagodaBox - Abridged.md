@@ -23,7 +23,7 @@ Otherwise, just keep in mind that I use:
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ``` 
 
-1. Initialize your Git repo
+1. Initialize your Git repo:
 ```
 $ git init && git add . && git commit -m 'Fresh Symfony'
 ```
@@ -32,7 +32,7 @@ $ git init && git add . && git commit -m 'Fresh Symfony'
 	- **higher than 4.0**: `$ composer require symfony/icu 1.1.*`
 	- **lower than 4.0** or non-existent: `$ composer require symfony/icu 1.0.*`
 
-1. Use asset symlinks
+1. Use asset symlinks:
 	- ```$ $EDITOR composer.json```
 	- ``` "extra": {
     …,
@@ -55,9 +55,11 @@ $ sf generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=HelloBundl
 $ git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
 
-1. Add *Boxfile*, see [boilerplate/Boxfile](boilerplate/Boxfile)
+1. Add *Boxfile*
+	- see: [boilerplate/Boxfile](boilerplate/Boxfile)
+	- ```$ $EDITOR Boxfile```
 
-1. Commit work 
+1. Commit work: 
 ```
 $ git add . && git commit -m 'Demo content installed, Boxfile added'
 ```
