@@ -49,7 +49,7 @@ $ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pach
 $ sf generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
 ```
 
-1. Add a Boxfile: ```$ $EDITOR Boxfile```, see: [boilerplate/Boxfile](boilerplate/Boxfile)
+1. Add a Boxfile: ```$ $EDITOR Boxfile```, see: [boilerplate / Boxfile](../boilerplate/Boxfile)
 
 1. Commit work: 
 ```
