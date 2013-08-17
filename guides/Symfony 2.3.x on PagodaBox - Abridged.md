@@ -23,7 +23,8 @@ Otherwise, just keep in mind that I use:
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ``` 
 
-1. Initialize your Git repo<br/>```$ git init && git add . && git commit -m 'Fresh Symfony'```
+1. Initialize your Git repo
+```$ git init && git add . && git commit -m 'Fresh Symfony'```
 
 1. Ensure symfony/icu parity: ```php -i | grep "ICU v"``` If ICU version is:
 	- **higher than 4.0**: `$ composer require symfony/icu 1.1.*`
