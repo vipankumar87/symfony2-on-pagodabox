@@ -90,8 +90,7 @@ Symlinks save disk space and visits to the command line. Each time you add a Bun
 Of the <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">three main ways</a> to do this I like this one-liner:
 
 ```
-$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
-chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 ```
 If Apache isn't running you'll see an error ***chmod: Invalid entry format…*** in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case `_www`).
 
@@ -123,7 +122,7 @@ If you haven't, sign up for PagodaBox, setup your [git SSH key](http://help.pago
 ### Create a new application in the dashboard
 * click New Application
 * select Empty Repo
-* name your app
+* name your app and click Launch Application
 * select Git for deployment mode
 
 When naming you need to pick something globally unique to PagodaBox: just go simple and memorable, it's mainly for your PagodaBox test domain.

@@ -18,7 +18,7 @@ Otherwise, just keep in mind that I use:
 
 1. In PagodaBox, create a new application
 
-1. Start locally, replace **fresh** with your project folder:
+1. In local, replace **fresh** with your project folder:
 ```
 $ mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ``` 
@@ -41,8 +41,7 @@ $ git init && git add . && git commit -m 'Fresh Symfony'
 
 1. Set **app/cache** and **app/logs** permissions:
 ```
-$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs &&
-chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 ```
 
 1. Bootstrap some production content: 
@@ -67,4 +66,4 @@ $ git remote add pagoda git@git.pagodabox.com:fresh.git
 $ git push -u pagoda --all
 ```
 
-1.
+1. Add a MySQL database in PagodaBox then 
