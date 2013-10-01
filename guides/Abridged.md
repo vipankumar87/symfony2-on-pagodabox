@@ -79,8 +79,16 @@ md5 -s '[DIFFERENT PHRASE]' | sed s/'.* = '/''/
 ```
 
 1. In PagodaBox dashboard: 
-    - add a MySQL database, cloud is free (the web UI will often hang, just refresh after a minute)
-    - click on your database (manage) 
-    - click show credentials and copy down credentials
-    - click Environment Vars (up top) and follow the same template as [boilerplate / envars.sh](../boilerplate/envars.sh) making sure to use the Pagoda values like: [images / PagodaVars.png](images/PagodaVars.png)
+    - add a MySQL database; cloud is free; the web UI will often hang, just refresh after a minute
+    - click to manage your database
+    - (at bottom of view) click show credentials and copy down the credentials
+    - click Environment Vars (up top) and follow the same template as [boilerplate / envars.sh](../boilerplate/envars.sh) making sure to use the Pagoda values, example: [images / PagodaVars.png](images/PagodaVars.png)
+    
+1. Test the database with some fixture data
+Get fixtures (fix composer.json stability)
+	- → `$EDITOR composer.json`
+	- `…"minimum-stability": "dev",…'
+	- → `composer require "doctrine/doctrine-fixtures-bundle" master-dev`
+	- → `php app/console doctrine:database:create`
+	- 
 
