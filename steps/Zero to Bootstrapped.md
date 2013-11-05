@@ -71,15 +71,15 @@ Then, check [http://fresh.local/hello/world](http://fresh.local/hello/world) in 
 
 ## §2. Open up PagodaBox and hook into it
 
-on **[PagodaBox](https://dashboard.pagodabox.com/)** …
+On your **[PagodaBox dashboard](https://dashboard.pagodabox.com/)** …
 
 1. Create a new application 
 	- select **Empty Repo**
 	- name it whatever (like **fresh**)
 
-back on **Local** …<br/>(you have configured [git/ssh](http://help.pagodabox.com/customer/portal/articles/200927), right?)
+Back on **Local** …<br/>after you have configured [git/ssh](http://help.pagodabox.com/customer/portal/articles/200927)
 
-1. add *pagoda* remote; replace *fresh.git* with *[your app].git* →<br/>
+1. add **pagoda** remote; replace fresh.git with [your app].git →
 ```
 git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
@@ -89,7 +89,7 @@ git remote add pagoda git@git.pagodabox.com:fresh.git
 git push -u pagoda --all
 ```
 
-1. check it out [http://fresh.gopagoda.com/hello/people](http://fresh.gopagoda.com/hello/people)
+1. check your app out [http://fresh.gopagoda.com/hello/people](http://fresh.gopagoda.com/hello/people)
 
 
 ## §3. Add MySQL to the Mix
