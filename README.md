@@ -1,5 +1,4 @@
-Bootstrapping Symfony2 on PagodaBox
-====
+# Bootstrapping Symfony2 on PagodaBox
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
@@ -15,7 +14,7 @@ I started this repository to document a reproducible, low friction workflow for 
 
 See [about / Preface.md](Preface.md) if something doesn't make sense.
 
-## Tested Against
+### Tested Against
 
 | Tested against<br/>Symfony Standard Edition | Date |
 | --- | --- |
