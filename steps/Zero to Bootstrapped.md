@@ -11,11 +11,11 @@ Requires:
 
 ## §1. Create a (fresh) Symfony2 Project
 
-If you *don't* have a Symfony2 project handy you're in the right place — *otherwise* just do steps **4 & 7**…<br/>on your **Local** machine:
+On your **Local** machine…<br/>if you have a Symfony2 project handy just do steps **4 & 7**,<br/>*otherwise* the following will get a skeleton app in place:
 
-1. create a [Standard Edition](https://github.com/symfony/symfony-standard) project with [composer](http://getcomposer.org/);<br/>replace **fresh** with your preferred folder name → `mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction`
+1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → `mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction`
 
-1. git init →<br/>
+1. init git →<br/>
 `git init && git add . && git commit -m 'Fresh Symfony'`
 
 1. add asset [symlinks](http://stackoverflow.com/questions/9931127/symfony-2-working-with-assets) directive in composer.json →<br/>`$EDITOR composer.json`
@@ -24,11 +24,11 @@ If you *don't* have a Symfony2 project handy you're in the right place — *othe
     "symfony-assets-install": "symlink"
 } ```
 
-1. ensure [symfony/icu parity](http://symfony.com/doc/master/components/intl.html);<br/>check  →<br/>`php -i | grep "ICU v"`<br/>if icu version is:
+1. ensure [symfony/icu parity](http://symfony.com/doc/master/components/intl.html) →<br/>`php -i | grep "ICU v"`<br/>if icu version is:
 	- **higher than 4.0** →<br/>`composer require symfony/icu 1.1.*`
 	- **lower than 4.0** or non-existent →<br/>`composer require symfony/icu 1.0.*`
 
-1. set permissions (chmod) for *app/cache* and *app/logs*;<br/>make sure Apache is running →
+1. chmod cache and logs, make sure Apache is running →
 ```rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs```
 
 1. generate some production content → 
@@ -44,12 +44,12 @@ app/console generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=Hel
 git add . && git commit -m 'Demo content installed, Boxfile added'
 ```
 
-Visit `http://localhost:8001/config.php` in your browser, hopefully your server requirments are met.
+Visit [http://fresh.local/config.php](http://fresh.local/config.php) in your browser; hopefully your server requirments are met.
 
-Then, check `…local/hello/world` in your browser
+Then, check [http://fresh.local/hello/world](http://fresh.local/hello/world) in your browser.<br/>Now, PagodaBox.
 
 
-## §2. PagodaBox, cretate an app and hook into it
+## §2. Open up PagodaBox and hook into it
 
 on **[PagodaBox](https://dashboard.pagodabox.com/)** …
 
@@ -57,26 +57,25 @@ on **[PagodaBox](https://dashboard.pagodabox.com/)** …
 	- select **Empty Repo**
 	- name it whatever (like **fresh**)
 
-on **Local** …<br/>(you have configured [git/ssh](http://help.pagodabox.com/customer/portal/articles/200927), right?)
+back on **Local** …<br/>(you have configured [git/ssh](http://help.pagodabox.com/customer/portal/articles/200927), right?)
 
-1. add *pagoda* remote; replace **fresh.git** with **[your app].git** →<br/>
+1. add *pagoda* remote; replace *fresh.git* with *[your app].git* →<br/>
 ```
 git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
 
-1. deploy and test →<br/>```git push -u pagoda --all``` and check it out `http://fresh.gopagoda.com/hello/people`
+1. deploy and test →<br/>`git push -u pagoda --all`<br/>and check it out [http://fresh.gopagoda.com/hello/people](http://fresh.gopagoda.com/hello/people)
 
 
 ## §3. Add MySQL to the Mix
 
-1. Update **parameters.yml.dist** →
-   - `$EDITOR app/config/parameters.yml.dist` 2. 
+1. Update **parameters.yml.dist** →<br/>`$EDITOR app/config/parameters.yml.dist` 
    - see: [boilerplate / parameters.yml.dist](../boilerplate/parameters.yml.dist)
 
-1. Update local **parameters.yml** →
-	- `rm app/config/parameters.yml; composer install --no-interaction`
-	- and secret →``` SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
-	```
+1. Update local **parameters.yml** →<br/>`rm app/config/parameters.yml; composer install --no-interaction`
+	- and add a secret; change *[YOUR PHRASE]* →<br/>
+``` SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
+```	
 
 1. Create **envars.sh** (and add to .gitignore) →
 	- `sed -i.orig -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore.orig && $EDITOR envars.sh	`	
