@@ -16,7 +16,7 @@ See [about / Preface.md](Preface.md) if something doesn't make sense.
 
 ### Tested Against
 
-| Tested against<br/>Symfony Standard Edition | Date |
+| Symfony Standard Edition | Date |
 | --- | --- |
 | 2.3.3 | August 16, 2013 |
 
