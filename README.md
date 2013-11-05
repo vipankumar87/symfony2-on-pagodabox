@@ -7,17 +7,13 @@ I started this repository to document a reproducible, low friction workflow for 
 
 ## Steps
 
-### One shot…
+### One shot:
+####[Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md)
 
-[steps / Zero to Bootstrapped.md](steps/Zero%20to%20Bootstrapped.md)
+### Or, with commentary:
+####[1. Install Symfony](steps/1.%20Install%20Symfony.md)<br/>[2. Open PagodaBox](steps/2.%20Open%20PagodaBox.md)<br/>[3. Add MySql](steps/1.%20Add%20MySQL.md)
 
-### or, with commentary
-
-1. Install Symfony
-2. …
-3. …
-
-Check the [about / Preface.md](Preface.md) if something doesn't make sense.
+See [about / Preface.md](Preface.md) if something doesn't make sense.
 
 ## Tested Against
 

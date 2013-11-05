@@ -13,7 +13,7 @@ Requires:
 
 On your **Local** machine.<br/>If you have a Symfony2 project handy just do steps **4 & 7**.
 
-1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → 
+1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace `fresh` with your own folder name → 
 ```
 mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ```
@@ -75,11 +75,11 @@ On your **[PagodaBox dashboard](https://dashboard.pagodabox.com/)** …
 
 1. Create a new application 
 	- select **Empty Repo**
-	- name it whatever (like **fresh**)
+	- name it whatever (like `fresh`)
 
 Back on **Local** …<br/>after you have configured [git/ssh](http://help.pagodabox.com/customer/portal/articles/200927)
 
-1. add **pagoda** remote; replace fresh.git with [your app].git →
+1. add **pagoda** remote; replace `fresh.git` with `[your app].git` →
 ```
 git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
