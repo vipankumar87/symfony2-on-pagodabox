@@ -11,9 +11,7 @@ Requires:
 
 ## §1. Create a (fresh) Symfony2 Project
 
-On your **Local** machine. 
-
-If you have a Symfony2 project handy just do steps **4 & 7**, *otherwise* the following will get a skeleton app in place:
+On your **Local** machine.<br/>If you have a Symfony2 project handy just do steps **4 & 7**.
 
 1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → 
 ```
@@ -37,7 +35,11 @@ $EDITOR composer.json
   } 
 ```
 
-1. ensure [symfony/icu parity](http://symfony.com/doc/master/components/intl.html) →<br/>`php -i | grep "ICU v"`<br/>if icu version is:
+1. ensure [symfony/icu parity](http://symfony.com/doc/master/components/intl.html) →
+```
+php -i | grep "ICU v"
+```
+if icu version is:
 	- **higher than 4.0** →<br/>`composer require symfony/icu 1.1.*`
 	- **lower than 4.0** or non-existent →<br/>`composer require symfony/icu 1.0.*`
 
