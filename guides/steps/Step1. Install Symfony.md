@@ -1,0 +1,120 @@
+Step 1: Create a Symfony2 Project
+==========================
+
+If you don't have a Symfony2 project handy then bootstrap one on your local machine. 
+
+This is a concise guide that outlines the basics. 
+
+You'll need [Composer](http://) installed on your prompt.
+
+## composer create-project
+
+Create a new folder for your project (I'll demo using `fresh`)
+
+```
+$ mkdir fresh
+```
+
+Change into `fresh` and install the current stable [Standard Edition](https://github.com/symfony/symfony-standard)
+
+```
+$ cd fresh
+$ create-project symfony/framework-standard-edition . --no-interaction
+```
+
+if you want to use a specific version, say 2.3.1, add `2.3.1` after the path `.`
+
+```
+…framework-standard-edition . 2.3.1 --no-interaction
+```
+
+you can [check available versions on Packagist](https://packagist.org/packages/symfony/framework-standard-edition) or use this one-liner to print available version numbers<br/>(*can take like 20 seconds depending on the network*)
+
+```
+$ composer show symfony/framework-standard-edition | grep "versions" | sed -e "s~, ~\\`echo -e '\n\r'`~g" | grep v[0-9]\.[0-9]\.[0-9]$ | sed -e s/v//
+```
+
+`--no-interaction` skips the prompts in Symfony's install scripts — specifically we're skipping parameters.yml.dist, which is addressed later.
+
+With the symfoy core and standard dependencies installed let's git some versioning done.
+
+## git init
+
+Knowing Symfony comes with a good `.gitignore` capture the initial state of the applicaiton code:
+
+```
+$ git init && git add . && git commit -m 'Fresh Symfony'
+```
+Git is an important tool in the PagodaBox workflow, which we'll see.
+
+## symfony/icu parity
+
+Symfony2 uses the well supported [ICU library](http://site.icu-project.org/) to convert date/time/number/currency for internationalization and localization. Since ICU is a generic C library PHP ships with the [Intl extension](http://www.php.net/manual/en/intro.intl.php) which adapts ICU for use in PHP. Some shared hosts don't install Intl so Symfony ships with [symfony/icu](https://packagist.org/packages/symfony/icu) to handle the presence or absence of the Intl gracefully — [you just need to install the  version that will work *both* locally and in production](http://symfony.com/doc/current/components/intl.html).
+
+At this time PagodaBox supports **Intl 1.1.0** which bundles **ICU 4.2.1**.
+
+Check your local environment:
+
+```
+$ php -i | grep "ICU v"
+```
+
+If the ICU version **> 4.0**, require **1.1.\***
+
+```
+$ composer require symfony/icu 1.1.*
+```
+If the ICU version **< 4.0** (or doesn't exist) require **1.0.\***
+
+```
+$ composer require symfony/icu 1.0.*
+```
+*you're limited to the `en` locale when using symfony/icu 1.0.0 — see parameters later*
+
+
+## symfony-assets-install: symlink
+
+Kind of a perosnal preference, but I recommend installing assets with symlinks in `composer.json`
+
+```
+$ $EDITOR composer.json
+```
+in the `extra` object add the `symfony-assets-install` key
+
+```
+"extra": {
+	…,
+	"symfony-assets-install": "symlink"
+}
+```
+Symlinks save disk space and visits to the command line. Each time you add a Bundle you'll want to install it's assets. With "symlink" you install once, each time you add a Bundle (or Bundles). You can also use "relative" for relative symlinks, both work fine when deploying to PagodaBox.
+
+## app/cache and app/logs
+
+Of the <a href="http://symfony.com/doc/master/book/installation.html#configuration-and-setup" target="_new">three main ways to set these permissions</a> to do this I like this one-liner:
+
+```
+$ rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+```
+If Apache isn't running you'll see an error ***chmod: Invalid entry format…*** in which case start Apache or remove the line `APACHEUSER=…;` and manually replace `$APACHEUSER` with the applicable username (in my case `_www`).
+
+## check your installation
+
+Nice, browse to [http://fresh.local/app_dev.php/](http://fresh.local/app_dev.php/) and make sure you see the Welcome screen and check <a href="http://fresh.local/config.php" target="_new">http://fresh.local/config.php</a> that your server is well configured.
+
+## optional: bootstrap some production content
+
+Generate some new content
+
+```
+$ php app/console generate:bundle --namespace=PagodaTest/Bundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
+```
+To make sure it installed correctly do:
+
+```
+$ php app/console router:debug --env=prod
+```
+
+…then visit [http://fresh.local/hello/AnythingHere](http://fresh.local/hello/AnythingHere) to see it in action.
+
+Don't forget to `$ php app/console cache:clear --env=prod` if you get an error.
