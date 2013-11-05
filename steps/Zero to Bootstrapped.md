@@ -40,7 +40,10 @@ $EDITOR composer.json
 php -i | grep "ICU v"
 ```
 if icu version is:
-	- **higher than 4.0** →<br/>`composer require symfony/icu 1.1.*`
+	- **higher than 4.0** →<br/>
+```
+composer require symfony/icu 1.1.*
+```
 	- **lower than 4.0** or non-existent →<br/>`composer require symfony/icu 1.0.*`
 
 1. chmod cache and logs, make sure Apache is running →
