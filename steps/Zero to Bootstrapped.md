@@ -13,7 +13,10 @@ Requires:
 
 On your **Local** machine…<br/>if you have a Symfony2 project handy just do steps **4 & 7**,<br/>*otherwise* the following will get a skeleton app in place:
 
-1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → `mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction`
+1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → 
+```
+mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
+```
 
 1. init git →<br/>
 `git init && git add . && git commit -m 'Fresh Symfony'`
@@ -64,21 +67,34 @@ back on **Local** …<br/>(you have configured [git/ssh](http://help.pagodabox.c
 git remote add pagoda git@git.pagodabox.com:fresh.git
 ```
 
-1. deploy and test →<br/>`git push -u pagoda --all`<br/>and check it out [http://fresh.gopagoda.com/hello/people](http://fresh.gopagoda.com/hello/people)
+1. deploy and test →
+```
+git push -u pagoda --all
+```
+
+1. check it out [http://fresh.gopagoda.com/hello/people](http://fresh.gopagoda.com/hello/people)
 
 
 ## §3. Add MySQL to the Mix
 
-1. Update **parameters.yml.dist** →<br/>`$EDITOR app/config/parameters.yml.dist` 
+1. Update **parameters.yml.dist** →
+```
+$EDITOR app/config/parameters.yml.dist
+```
    - see: [boilerplate / parameters.yml.dist](../boilerplate/parameters.yml.dist)
 
-1. Update local **parameters.yml** →<br/>`rm app/config/parameters.yml; composer install --no-interaction`
+1. Update local **parameters.yml** →
+```
+rm app/config/parameters.yml; composer install --no-interaction
+```
 	- and add a secret; change *[YOUR PHRASE]* →<br/>
 ``` SECRET=`md5 -s '[YOUR PHRASE]' | sed s/'.* = '/''/` && sed -i.orig s/'secret.*$'/"secret: $SECRET"/ app/config/parameters.yml && rm app/config/parameters.yml.orig
 ```	
 
 1. Create **envars.sh** (and add to .gitignore) →
-	- `sed -i.orig -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore.orig && $EDITOR envars.sh	`	
+```
+sed -i.orig -e '$a\' .gitignore && echo 'envars.sh' >> .gitignore && rm .gitignore.orig && $EDITOR envars.sh
+```
 	- see: [boilerplate / envars.sh](../boilerplate/envars.sh)
 	- run →`. ./envars.sh`
 
