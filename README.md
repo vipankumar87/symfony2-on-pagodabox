@@ -1,4 +1,4 @@
-# Bootstrapping Symfony2 on PagodaBox
+## Bootstrapping Symfony2 on PagodaBox
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
