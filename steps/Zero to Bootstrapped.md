@@ -11,21 +11,31 @@ Requires:
 
 ## §1. Create a (fresh) Symfony2 Project
 
-On your **Local** machine…<br/>if you have a Symfony2 project handy just do steps **4 & 7**,<br/>*otherwise* the following will get a skeleton app in place:
+On your **Local** machine. 
+
+If you have a Symfony2 project handy just do steps **4 & 7**, *otherwise* the following will get a skeleton app in place:
 
 1. create a [standard edition](https://github.com/symfony/symfony-standard) project with composer, replace *fresh* with your preferred folder name → 
 ```
 mkdir fresh && cd $_ && composer create-project symfony/framework-standard-edition . --no-interaction
 ```
 
-1. init git →<br/>
-`git init && git add . && git commit -m 'Fresh Symfony'`
+1. init git →
+```
+git init && git add . && git commit -m 'Fresh Symfony'
+```
 
-1. add asset [symlinks](http://stackoverflow.com/questions/9931127/symfony-2-working-with-assets) directive in composer.json →<br/>`$EDITOR composer.json`
-	- append to extra: ``` "extra": {
-    …,
-    "symfony-assets-install": "symlink"
-} ```
+1. add asset [symlinks](http://stackoverflow.com/questions/9931127/symfony-2-working-with-assets) directive in composer.json →
+```
+$EDITOR composer.json
+```
+	- append to extra: 
+``` 
+  "extra": { 
+     …, 
+     "symfony-assets-install": "symlink"
+  } 
+```
 
 1. ensure [symfony/icu parity](http://symfony.com/doc/master/components/intl.html) →<br/>`php -i | grep "ICU v"`<br/>if icu version is:
 	- **higher than 4.0** →<br/>`composer require symfony/icu 1.1.*`
