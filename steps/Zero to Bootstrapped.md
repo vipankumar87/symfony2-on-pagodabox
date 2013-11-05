@@ -40,21 +40,21 @@ $EDITOR composer.json
 php -i | grep "ICU v"
 ```
 if icu version is:
-	- **higher than 4.0** →<br/>
-```
-composer require symfony/icu 1.1.*
-```
-	- **lower than 4.0** or non-existent →<br/>`composer require symfony/icu 1.0.*`
+	- **higher than 4.0** → `composer require symfony/icu 1.1.*`
+	- **lower than 4.0** or non-existent → `composer require symfony/icu 1.0.*`
 
 1. chmod cache and logs, make sure Apache is running →
-```rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs```
+```
+rm -rf app/cache/* && rm -rf app/logs/*; APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd' | grep -v root | head -1 | cut -d\  -f1`; sudo chmod +a "$APACHEUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs && chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+```
 
 1. generate some production content → 
 ```
 app/console generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=HelloBundle --no-interaction --structure --dir=src --format=annotation
 ```
 
-1. create your *Boxfile* →<br/>```$EDITOR Boxfile```
+1. create your *Boxfile* →
+```$EDITOR Boxfile```
 	- see: [boilerplate / Boxfile](https://raw.github.com/mfdj/symfony2-on-pagodabox/master/boilerplate/Boxfile)
 
 1. commit →<br/>
