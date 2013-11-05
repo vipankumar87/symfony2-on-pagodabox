@@ -54,7 +54,9 @@ app/console generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=Hel
 ```
 
 1. create your *Boxfile* →
-```$EDITOR Boxfile```
+```
+$EDITOR Boxfile
+```
 	- see: [boilerplate / Boxfile](https://raw.github.com/mfdj/symfony2-on-pagodabox/master/boilerplate/Boxfile)
 
 1. commit →<br/>
