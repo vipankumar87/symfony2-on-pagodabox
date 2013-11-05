@@ -1,4 +1,4 @@
-Zero to Bootstraped
+Zero to Bootstrapped
 ==========================
 
 This is the abridged, take no prisoners guide to testdrive Symfony2 on PagodaBox.

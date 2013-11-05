@@ -3,7 +3,7 @@ Bootstrapping Symfony2 on PagodaBox
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
-I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrapers but would be useful if you're thinking about moving your Symfony2 app to PagodaBox.
+I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrappers but would be useful if you're thinking about moving your Symfony2 app to PagodaBox.
 
 ## Steps
 
