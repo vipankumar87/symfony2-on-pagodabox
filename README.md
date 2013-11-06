@@ -1,22 +1,23 @@
-## Bootstrapping Symfony2 on PagodaBox
+## Bootstrapping Symfony2.3+ on PagodaBox
 
 **This is a work in progress — feedback welcome: <a href="https://twitter.com/markfoxisadj" target="_new">@markfoxisadj</a>**
 
-I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrappers but would be useful if you're thinking about moving your Symfony2 app to PagodaBox.
-
-[Why PB+S2](about/Why.md)?
+I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrappers but should be useful if you're migrating your app.
 
 ## Steps
 
 ### Abridged:
-####[Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md)
 
-### Or, with commentary:
+#### Here's [Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md) for the impatient.
+
+### Or, the same process with more details:
 ####[1. Install Symfony](steps/1.%20Install%20Symfony.md)<br/>[2. Open PagodaBox](steps/2.%20Open%20PagodaBox.md)<br/>[3. Add MySql](steps/1.%20Add%20MySQL.md)
 
-See [about / Preface.md](Preface.md) if something doesn't make sense.
+See **about/[Preface.md](Preface.md)** if something doesn't make sense.
 
-### Tested Against
+Or, read [why](about/Why.md) I thought this was a good idea.
+
+### Process Tested Against
 
 | Symfony Standard Edition | Date |
 | --- | --- |
