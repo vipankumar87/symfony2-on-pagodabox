@@ -4,9 +4,11 @@
 
 I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrappers but would be useful if you're thinking about moving your Symfony2 app to PagodaBox.
 
+[Why PB+S2](about/Why.md)?
+
 ## Steps
 
-### One shot:
+### Abridged:
 ####[Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md)
 
 ### Or, with commentary:
