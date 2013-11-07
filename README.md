@@ -14,10 +14,10 @@ Here's [Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md) for the impatie
 
 [1. Install Symfony](steps/1.%20Install%20Symfony.md)<br/>[2. Open PagodaBox](steps/2.%20Open%20PagodaBox.md)<br/>[3. Add MySql](steps/1.%20Add%20MySQL.md)
 
-See:
+See about:
 
-- **about/[Preface.md](Preface.md)** if something doesn't make sense
-- **about/[Why.md](about/Why.md)** for the rationle behind this project
+- [Preface.md](Preface.md) if something doesn't make sense
+- [Why.md](about/Why.md) for the rationle behind this project
 
 ### Process Tested Against
 
