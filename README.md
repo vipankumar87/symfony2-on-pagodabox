@@ -4,7 +4,7 @@
 
 I started this repository to document a reproducible, low friction workflow for deploying  <a href="http://symfony.com/" target="_new">Symfony2</a> on <a href="http://pagodabox.com/" target="_new">PagodaBox</a>. It details a fresh install for bootstrappers but should be useful if you're migrating your app.
 
-## steps/
+## [steps](steps)
 
 ### Abridged:
 
@@ -14,10 +14,10 @@ Here's [Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md) for the impatie
 
 [1. Install Symfony](steps/1.%20Install%20Symfony.md)<br/>[2. Open PagodaBox](steps/2.%20Open%20PagodaBox.md)<br/>[3. Add MySql](steps/1.%20Add%20MySQL.md)
 
-See
+See:
 
 - **about/[Preface.md](Preface.md)** if something doesn't make sense
-- **about/[Why.md](about/Why.md)** for background about this
+- **about/[Why.md](about/Why.md)** for the rationle behind this project
 
 ### Process Tested Against
 
