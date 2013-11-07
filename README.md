@@ -16,8 +16,8 @@ Here's [Zero to Bootstrapped](steps/Zero%20to%20Bootstrapped.md) for the impatie
 
 See about:
 
-- [Preface.md](Preface.md) if something doesn't make sense
-- [Why.md](about/Why.md) for the rationle behind this project
+- [Preface](about/Preface.md), if something doesn't make sense
+- [Why](about/Why.md), for the rationle behind this project
 
 ### Process Tested Against
 
