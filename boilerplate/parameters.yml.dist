@@ -8,11 +8,13 @@ parameters:
 
     # Database config — PagodaBox uses MySQL
     database_driver   : pdo_mysql
-    database_name     : %database.name%    
-    database_host     : %database.host%
-    database_port     : %database.port%
-    database_user     : %database.user%
-    database_password : %database.pass%
+
+    # handled by paramters_pagoda.php
+    database_name     : ~
+    database_host     : ~
+    database_port     : ~
+    database_user     : ~
+    database_password : ~
 
     # Mail - customize if you use it
     mailer_transport  : smtp
@@ -24,7 +26,7 @@ parameters:
     locale : en
 
     # http://symfony.com/doc/current/reference/configuration/framework.html#secret
-    secret : %general.secret%
+    secret : ~
 
     # You can define your own parameters:
     # http://symfony.com/doc/current/components/dependency_injection/parameters.html

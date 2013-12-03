@@ -30,7 +30,6 @@ web1: # identifier that corresponds with component type and id in your apps dash
     - mbstring
     - mysql
     - pdo_mysql
-    - xsl
     - zip
   zend_extensions:
     - xcache

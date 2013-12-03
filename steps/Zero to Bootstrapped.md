@@ -6,7 +6,7 @@ This is the abridged, take no prisoners guide to testdrive Symfony2 on PagodaBox
 Requires:
 
 - [*nix](http://en.wikipedia.org/wiki/Unix-like)
-- [composer](http://getcomposer.org/) (installed globally)
+- [composer](http://getcomposer.org/) (assumed to be installed globally)
 - [git](http://git-scm.com/)
 
 ## §1. Create a (fresh) Symfony2 Project
@@ -64,9 +64,8 @@ $EDITOR Boxfile
 git add . && git commit -m 'Demo content installed, Boxfile added'
 ```
 
-Visit [http://fresh.local/config.php](http://fresh.local/config.php) in your browser; hopefully your server requirments are met.
-
-Then, check [http://fresh.local/hello/world](http://fresh.local/hello/world) in your browser.<br/>Now, PagodaBox.
+Visit [http://fresh.local/config.php](http://fresh.local/config.php) in your browser; confirm server requirments are met.<br/>
+Then check [http://fresh.local/hello/world](http://fresh.local/hello/world) in your browser. Cool.
 
 
 ## §2. Open up PagodaBox and hook into it

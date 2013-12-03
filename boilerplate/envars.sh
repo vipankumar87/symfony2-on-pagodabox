@@ -1,7 +1,0 @@
-#!/bin/bash
-export SYMFONY__DATABASE__NAME=~
-export SYMFONY__DATABASE__HOST=localhost
-export SYMFONY__DATABASE__PORT=3306
-export SYMFONY__DATABASE__USER=~
-export SYMFONY__DATABASE__PASS=~
-export SYMFONY__GENERAL__SECRET=YourSecret
