@@ -24,14 +24,13 @@ web1: # identifier that corresponds with component type and id in your apps dash
     - app/logs
   php_extensions:
     # • iconv, posix, tokenizer, xml, ctype are enabled by default and tend to block builds when added
-    # • avoid APC with php 5.4.14 + symfony2 on PagodaBox; use Xcache instead
     - curl
     - intl    
     - mbstring
     - mysql
     - pdo_mysql
-    - zip
   zend_extensions:
+    # • use XCache, not APC — for PHP 5.4 you want APC 3.1.13+ and PagodaBox uses 3.1.9 (segfault city)
     - xcache
 
   # php.ini settings for symfony

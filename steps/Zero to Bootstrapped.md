@@ -6,8 +6,9 @@ This is the abridged, take no prisoners guide to testdrive Symfony2 on PagodaBox
 Requires:
 
 - [*nix](http://en.wikipedia.org/wiki/Unix-like)
-- [composer](http://getcomposer.org/) (assumed to be installed globally)
 - [git](http://git-scm.com/)
+- [pagoda cli](http://help.pagodabox.com/customer/portal/articles/175474)
+- [composer](http://getcomposer.org/) (assumed to be installed globally)
 
 ## §1. Create a (fresh) Symfony2 Project
 
@@ -57,7 +58,7 @@ app/console generate:bundle --namespace=PagodaTest/HelloBundle --bundle-name=Hel
 ```
 $EDITOR Boxfile
 ```
-	- see: [boilerplate / Boxfile](https://raw.github.com/mfdj/symfony2-on-pagodabox/master/boilerplate/Boxfile)
+	- see: [boilerplate / Boxfile](../boilerplate/Boxfile)
 
 1. commit →<br/>
 ```
